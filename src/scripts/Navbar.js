@@ -1,366 +1,461 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 
-const COLORS = {
-  espresso:   "#3B2314",
-  cream:      "#F5EFE0",
-  gold:       "#C69C3C",
-  terracotta: "#B85C38",
-  green:      "#6B8F3A",
+/* ─── BRAND TOKENS ──────────────────────────────────────────── */
+const C = {
+  dark:  "#3f1016",
+  wine:  "#65333c",
+  muted: "#9d7961",
+  cream: "#feefdc",
+  rose:  "#d6bcad",
 }
 
 const NAV_LINKS = [
-  { label: "Menu",          href: "#menu" },
-  { label: "Princess Cake", href: "#princess-cake" },
-  { label: "Catering",      href: "#catering" },
-  { label: "Our Story",     href: "#our-story" },
+  { label: "Menu",          href: "#menu",          featured: false },
+  { label: "Princess Cake", href: "#princess-cake", featured: true  },
+  { label: "Catering",      href: "#catering",      featured: false },
+  { label: "Our Story",     href: "#visit",     featured: false },
 ]
 
-/* ── tiny hook: detect scroll position ─────────────────── */
-function useScrolled(threshold = 10) {
+/* ─── HOOKS ──────────────────────────────────────────────────── */
+function useScrolled(threshold = 12) {
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > threshold)
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
+    const fn = () => setScrolled(window.scrollY > threshold)
+    window.addEventListener("scroll", fn, { passive: true })
+    fn()
+    return () => window.removeEventListener("scroll", fn)
   }, [threshold])
   return scrolled
 }
 
-/* ── NavLink ────────────────────────────────────────────── */
-function NavLink({ label, href }) {
-  const [hovered, setHovered] = useState(false)
+function useAdminBarHeight() {
+  const [h, setH] = useState(0)
 
-  return (
-    <a
-      href={href}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        fontFamily: "'Lato', sans-serif",
-        fontWeight: 300,
-        fontSize: "0.8125rem",
-        letterSpacing: "0.12em",
-        textTransform: "uppercase",
-        color: hovered ? COLORS.gold : "rgba(245,239,224,0.85)",
-        textDecoration: "none",
-        paddingBottom: "3px",
-        borderBottom: hovered
-          ? `1px solid ${COLORS.gold}`
-          : "1px solid transparent",
-        transition: "color 0.25s ease, border-color 0.25s ease",
-        whiteSpace: "nowrap",
-      }}
-    >
-      {label}
-    </a>
-  )
+  useEffect(() => {
+    const bar = document.getElementById("wpadminbar")
+
+    if (bar) {
+      setH(bar.offsetHeight) // ya detecta 32px desktop / 46px mobile
+    } else {
+      setH(0)
+    }
+  }, [])
+
+  return h
 }
 
-/* ── CTAButton ──────────────────────────────────────────── */
-function CTAButton({ label, href }) {
-  const [hovered, setHovered] = useState(false)
-
-  return (
-    <a
-      href={href}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        fontFamily: "'Lato', sans-serif",
-        fontWeight: 400,
-        fontSize: "0.75rem",
-        letterSpacing: "0.14em",
-        textTransform: "uppercase",
-        textDecoration: "none",
-        padding: "8px 20px",
-        border: `1.5px solid ${COLORS.gold}`,
-        borderRadius: "2px",
-        backgroundColor: hovered ? COLORS.gold : "transparent",
-        color: hovered ? COLORS.espresso : COLORS.gold,
-        transition: "background-color 0.25s ease, color 0.25s ease",
-        whiteSpace: "nowrap",
-        lineHeight: 1,
-      }}
-    >
-      {label}
-    </a>
-  )
+function useMobile(breakpoint = 860) {
+  const [mobile, setMobile] = useState(false)
+  useEffect(() => {
+    const fn = () => setMobile(window.innerWidth < breakpoint)
+    fn()
+    window.addEventListener("resize", fn)
+    return () => window.removeEventListener("resize", fn)
+  }, [breakpoint])
+  return mobile
 }
 
-/* ── MobileMenu ─────────────────────────────────────────── */
-function MobileMenu({ open }) {
+/* ─── FROSTING WAVE ──────────────────────────────────────────── */
+function FrostingWave({ color }) {
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: "100%",
-        left: 0,
-        right: 0,
-        backgroundColor: COLORS.espresso,
-        borderTop: `1px solid rgba(198,156,60,0.2)`,
-        boxShadow: "0 8px 24px rgba(0,0,0,0.25)",
-        padding: open ? "1.5rem 1.5rem 2rem" : "0 1.5rem",
-        maxHeight: open ? "400px" : "0px",
-        overflow: "hidden",
-        transition: "max-height 0.35s cubic-bezier(0.4,0,0.2,1), padding 0.35s ease",
-        display: "flex",
-        flexDirection: "column",
-        gap: "1.25rem",
-        zIndex: 99,
-      }}
-    >
-      {NAV_LINKS.map(link => (
-        <a
-          key={link.label}
-          href={link.href}
-          style={{
-            fontFamily: "'Lato', sans-serif",
-            fontWeight: 300,
-            fontSize: "0.875rem",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "rgba(245,239,224,0.8)",
-            textDecoration: "none",
-          }}
-        >
-          {link.label}
-        </a>
-      ))}
-      <CTAButton label="Order Pickup" href="#order" />
-    </div>
-  )
-}
-
-/* ── FrostingWave ───────────────────────────────────────── */
-/*
- * SVG scallop shape that "drips" below the navbar.
- * 18 bumps across 1440 px, each 80 px wide, dipping ~38 px.
- * A couple of bumps are intentionally taller/shorter for an
- * organic hand-piped frosting feel.
- */
-function FrostingWave({ fill, scrolled }) {
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        transform: "translateY(100%)",
-        lineHeight: 0,          /* kill inline gap below svg */
-        pointerEvents: "none",
-        zIndex: 99,
-        /*
-         * Fade the wave out slightly when scrolled so the
-         * glassmorphism effect looks clean against any bg.
-         */
-        opacity: scrolled ? 0.93 : 1,
-        transition: "opacity 0.4s ease",
-      }}
-    >
+    <div aria-hidden="true" style={{
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      transform: "translateY(100%)",
+      lineHeight: 0,
+      pointerEvents: "none",
+      zIndex: 0,
+    }}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 1440 54"
+        viewBox="0 0 1440 52"
         preserveAspectRatio="none"
-        style={{ display: "block", width: "100%", height: "auto" }}
+        style={{ display: "block", width: "100%", height: "52px" }}
       >
-        {/*
-          Path breakdown:
-          • M0,0 H1440 V9  — rectangular top, down to wave baseline
-          • Q cx,cy ex,ey  — 18 quadratic bezier scallops going right→left
-            control-y varies between 44–52 for organic unevenness
-          • L0,9 → L0,0 Z  — close the shape
-        */}
         <path
           d={
-            "M0,0 H1440 V9 " +
-            "Q1400,50 1360,9 " +
-            "Q1320,44 1280,9 " +
-            "Q1240,52 1200,9 " +
-            "Q1160,46 1120,9 " +
-            "Q1080,52 1040,9 " +
-            "Q1000,44 960,9 " +
-            "Q920,50 880,9 " +
-            "Q840,46 800,9 " +
-            "Q760,52 720,9 " +
-            "Q680,44 640,9 " +
-            "Q600,50 560,9 " +
-            "Q520,46 480,9 " +
-            "Q440,52 400,9 " +
-            "Q360,44 320,9 " +
-            "Q280,50 240,9 " +
-            "Q200,46 160,9 " +
-            "Q120,52 80,9 " +
-            "Q40,44 0,9 " +
+            "M0,0 H1440 V10 " +
+            "Q1410,48 1380,10 Q1350,46 1320,10 Q1290,48 1260,10 " +
+            "Q1230,46 1200,10 Q1170,48 1140,10 Q1110,46 1080,10 " +
+            "Q1050,48 1020,10 Q990,46 960,10  Q930,48 900,10  " +
+            "Q870,46 840,10  Q810,48 780,10  Q750,46 720,10  " +
+            "Q690,48 660,10  Q630,46 600,10  Q570,48 540,10  " +
+            "Q510,46 480,10  Q450,48 420,10  Q390,46 360,10  " +
+            "Q330,48 300,10  Q270,46 240,10  Q210,48 180,10  " +
+            "Q150,46 120,10  Q90,48 60,10   Q30,46 0,10   " +
             "L0,0 Z"
           }
-          fill={fill}
+          fill={color}
         />
       </svg>
     </div>
   )
 }
 
-/* ── HamburgerIcon ──────────────────────────────────────── */
-function HamburgerIcon({ open, color }) {
-  const bar = (rotation, translateY) => ({
-    display: "block",
-    width: "22px",
-    height: "1.5px",
-    backgroundColor: color,
-    borderRadius: "1px",
-    transformOrigin: "center",
-    transition: "transform 0.3s ease, opacity 0.3s ease",
-    transform: rotation,
-    opacity: translateY === "opacity0" ? 0 : 1,
-  })
+/* ─── SMOOTH SCROLL HELPER ───────────────────────────────────── */
+function smoothTo(href, offset = 0) {
+  if (!href.startsWith("#")) { window.location.href = href; return }
+  const el = document.querySelector(href)
+  if (!el) return
+  const top = el.getBoundingClientRect().top + window.scrollY - offset
+  window.scrollTo({ top, behavior: "smooth" })
+}
+
+/* ─── DESKTOP NAV LINK ───────────────────────────────────────── */
+function DesktopLink({ label, href, featured, scrollOffset }) {
+  const [hovered, setHovered] = useState(false)
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "5px", cursor: "pointer" }}>
-      <span style={bar(open ? "rotate(45deg) translate(4.5px, 4.5px)" : "none", "")} />
-      <span style={bar("none", open ? "opacity0" : "")} />
-      <span style={bar(open ? "rotate(-45deg) translate(4.5px, -4.5px)" : "none", "")} />
+    <a
+      href={href}
+      onClick={(e) => { e.preventDefault(); smoothTo(href, scrollOffset) }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        fontFamily:    featured ? "'Playfair Display', serif" : "'Lato', sans-serif",
+        fontStyle:     featured ? "italic" : "normal",
+        fontWeight:    featured ? 700 : 400,
+        fontSize:      featured ? "0.90rem" : "0.72rem",
+        letterSpacing: featured ? "0.01em" : "0.17em",
+        textTransform: featured ? "none" : "uppercase",
+        color:         hovered  ? C.rose : (featured ? "rgba(214,188,173,0.88)" : "rgba(254,239,220,0.78)"),
+        textDecoration: "none",
+        transition: "color .22s ease, border-color .22s ease",
+        whiteSpace: "nowrap",
+        paddingBottom: "3px",
+        borderBottom: `1px solid ${hovered ? C.rose : "transparent"}`,
+      }}
+    >
+      {label}
+    </a>
+  )
+}
+
+/* ─── ORDER CTA ──────────────────────────────────────────────── */
+function OrderCTA({ href = "#order", compact = false }) {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <a
+      href={href}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        fontFamily: "'Lato', sans-serif",
+        fontWeight: 700,
+        fontSize: compact ? "0.65rem" : "0.70rem",
+        letterSpacing: "0.18em",
+        textTransform: "uppercase",
+        textDecoration: "none",
+        padding: compact ? "9px 18px" : "11px 24px",
+        border: `1.5px solid ${hovered ? C.cream : C.rose}`,
+        borderRadius: 0,
+        backgroundColor: hovered ? C.cream : "transparent",
+        color: hovered ? C.dark : C.cream,
+        transition: "all .22s ease",
+        whiteSpace: "nowrap",
+        lineHeight: 1,
+        transform: hovered ? "translateY(-1px)" : "none",
+        display: "inline-block",
+      }}
+    >
+      Order Pickup
+    </a>
+  )
+}
+
+/* ─── SEPARATOR DOT ──────────────────────────────────────────── */
+const Dot = () => (
+  <span style={{
+    display: "inline-block",
+    width: "3px", height: "3px",
+    borderRadius: 0,
+    background: C.rose,
+    opacity: 0.45,
+    flexShrink: 0,
+    alignSelf: "center",
+  }} />
+)
+
+/* ─── HAMBURGER ──────────────────────────────────────────────── */
+function Hamburger({ open, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label="Toggle navigation"
+      aria-expanded={open}
+      style={{
+        background: "rgba(254,239,220,0.07)",
+        border: "1px solid rgba(214,188,173,0.25)",
+        padding: "10px 12px",
+        cursor: "pointer",
+        borderRadius: 0,
+        display: "flex",
+        flexDirection: "column",
+        gap: "5px",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {[
+        open ? "rotate(45deg) translate(4.5px, 4.5px)" : "none",
+        "none",
+        open ? "rotate(-45deg) translate(4.5px, -4.5px)" : "none",
+      ].map((t, i) => (
+        <span key={i} style={{
+          display: "block",
+          width: "20px", height: "1.5px",
+          background: C.cream,
+          borderRadius: "1px",
+          transformOrigin: "center",
+          transition: "transform .28s ease, opacity .28s ease",
+          transform: t,
+          opacity: i === 1 && open ? 0 : 1,
+        }} />
+      ))}
+    </button>
+  )
+}
+
+/* ─── MOBILE DRAWER ──────────────────────────────────────────── */
+function MobileDrawer({ open, scrollOffset, onClose }) {
+  return (
+    <div style={{
+      maxHeight: open ? "500px" : "0",
+      overflow: "hidden",
+      transition: "max-height .38s cubic-bezier(.4,0,.2,1)",
+      background: C.dark,
+      borderTop: `1px solid rgba(214,188,173,0.12)`,
+    }}>
+      <div style={{
+        padding: "1.6rem 1.5rem 2rem",
+        display: "flex",
+        flexDirection: "column",
+        gap: "0",
+      }}>
+        {/* Section label */}
+        <div style={{
+          fontFamily: "'Lato', sans-serif",
+          fontSize: "0.55rem",
+          letterSpacing: "0.28em",
+          textTransform: "uppercase",
+          color: C.muted,
+          marginBottom: "1.2rem",
+          paddingBottom: "0.8rem",
+          borderBottom: `1px solid rgba(214,188,173,0.12)`,
+        }}>
+          Navigate
+        </div>
+
+        {NAV_LINKS.map((link) => (
+          <a
+            key={link.label}
+            href={link.href}
+            onClick={(e) => {
+              e.preventDefault()
+              onClose()
+              setTimeout(() => smoothTo(link.href, scrollOffset), 320)
+            }}
+            style={{
+              fontFamily: link.featured ? "'Playfair Display', serif" : "'Lato', sans-serif",
+              fontStyle: link.featured ? "italic" : "normal",
+              fontWeight: link.featured ? 700 : 400,
+              fontSize: link.featured ? "1.25rem" : "0.78rem",
+              letterSpacing: link.featured ? "-0.01em" : "0.14em",
+              textTransform: link.featured ? "none" : "uppercase",
+              color: link.featured ? C.rose : "rgba(254,239,220,0.78)",
+              textDecoration: "none",
+              padding: "0.9rem 0",
+              borderBottom: `1px solid rgba(214,188,173,0.08)`,
+              display: "block",
+              transition: "color .2s",
+            }}
+          >
+            {link.label}
+          </a>
+        ))}
+
+        {/* Phone */}
+        <a
+          href="tel:+14157812015"
+          style={{
+            fontFamily: "'Lato', sans-serif",
+            fontWeight: 300,
+            fontSize: "0.78rem",
+            letterSpacing: "0.06em",
+            color: "rgba(254,239,220,0.42)",
+            textDecoration: "none",
+            marginTop: "1.2rem",
+            marginBottom: "1.2rem",
+            display: "block",
+          }}
+        >
+          (415) 781-2015
+        </a>
+
+        <OrderCTA compact />
+      </div>
     </div>
   )
 }
 
-/* ── Navbar (main) ──────────────────────────────────────── */
+/* ─── MAIN NAVBAR ────────────────────────────────────────────── */
 export default function Navbar() {
-  const scrolled     = useScrolled(10)
+  const scrolled    = useScrolled(12)
+  const adminH      = useAdminBarHeight()
+  const isMobile    = useMobile(860)
   const [open, setOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+
+  // nav bar actual height: 72px normal, 64px scrolled + 2px accent line
+  const navHeight = scrolled ? 66 : 74
+  const scrollOffset = adminH + navHeight
+
+  const navBg = scrolled ? "rgba(56,14,20,0.97)" : C.dark
 
   useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth < 768)
-    window.addEventListener("resize", onResize)
-    return () => window.removeEventListener("resize", onResize)
-  }, [])
-
-  /* ── decorative dot separator ── */
-  const Dot = () => (
-    <span
-      style={{
-        display: "inline-block",
-        width: "3px",
-        height: "3px",
-        borderRadius: "50%",
-        backgroundColor: COLORS.gold,
-        opacity: 0.6,
-        flexShrink: 0,
-        alignSelf: "center",
-      }}
-    />
-  )
+    if (!isMobile) setOpen(false)
+  }, [isMobile])
 
   return (
     <nav
       style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-        width: "100%",
-        paddingBottom: "2px",
-        backgroundColor: scrolled
-          ? "rgba(42,24,14,0.96)"
-          : COLORS.espresso,
-        backdropFilter: scrolled ? "blur(12px)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(12px)" : "none",
-        boxShadow: scrolled
-          ? "0 4px 24px rgba(0,0,0,0.3)"
-          : "none",
-        transition: "background-color 0.4s ease, box-shadow 0.4s ease",
+        position: "fixed",
+        top: `${adminH}px`,
+        left: 0,
+        right: 0,
+        zIndex: 99999,
         overflow: "visible",
       }}
     >
-      {/* ── thin gold accent line at very top ── */}
-      <div style={{ height: "2px", background: `linear-gradient(90deg, transparent, ${COLORS.gold}, transparent)` }} />
+      {/* ── TOP ACCENT LINE ── */}
+      <div style={{
+        height: "2px",
+        background: `linear-gradient(90deg,
+          transparent 0%,
+          ${C.rose} 20%,
+          ${C.muted} 50%,
+          ${C.rose} 80%,
+          transparent 100%)`,
+      }} />
 
-      <div
-        style={{
-          maxWidth: "1200px",
+      {/* ── MAIN BAR ── */}
+      <div style={{
+        position: "relative",
+        background: navBg,
+        backdropFilter: scrolled ? "blur(18px)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(18px)" : "none",
+        boxShadow: scrolled
+          ? "0 8px 40px rgba(63,16,22,0.45)"
+          : "none",
+        transition: "background .35s ease, box-shadow .35s ease",
+      }}>
+
+        <div style={{
+          maxWidth: "1340px",
           margin: "0 auto",
-          padding: "0 1.5rem",
-          height: "68px",
+          padding: "0 2rem",
+          height: scrolled ? "64px" : "72px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          position: "relative",
-        }}
-      >
-        {/* ── Logo ── */}
-        <a href="/" style={{ textDecoration: "none", flexShrink: 0 }}>
-          <span
-            style={{
+          gap: "1.5rem",
+          transition: "height .3s ease",
+        }}>
+
+          {/* ── LOGO ── */}
+          <a href="/" style={{ textDecoration: "none", flexShrink: 0, lineHeight: 1 }}>
+            {/* Wordmark */}
+            <div style={{
               fontFamily: "'Playfair Display', serif",
               fontStyle: "italic",
               fontWeight: 700,
-              fontSize: "1.45rem",
-              color: COLORS.cream,
-              letterSpacing: "-0.01em",
+              fontSize: scrolled ? "1.38rem" : "1.52rem",
+              color: C.cream,
+              letterSpacing: "-0.025em",
               lineHeight: 1,
-            }}
-          >
-            Victoria
-          </span>
-          <span
-            style={{
-              display: "block",
+              transition: "font-size .3s ease",
+            }}>
+              Victoria Pastry Co.
+            </div>
+            {/* Tagline */}
+            <div style={{
               fontFamily: "'Lato', sans-serif",
-              fontWeight: 300,
-              fontSize: "0.55rem",
-              letterSpacing: "0.28em",
+              fontWeight: 700,
+              fontSize: "0.50rem",
+              letterSpacing: "0.30em",
               textTransform: "uppercase",
-              color: COLORS.gold,
-              marginTop: "2px",
-            }}
-          >
-            Pastry · Homemade
-          </span>
-        </a>
+              color: C.rose,
+              marginTop: "5px",
+              opacity: scrolled ? 0.7 : 1,
+              transition: "opacity .3s",
+            }}>
+              North Beach &nbsp;·&nbsp; Est. 1914
+            </div>
+          </a>
 
-        {/* ── Desktop links ── */}
-        {!isMobile && (
-          <div style={{ display: "flex", alignItems: "center", gap: "1.1rem" }}>
-            {NAV_LINKS.map((link, i) => (
-              <React.Fragment key={link.label}>
-                {i > 0 && <Dot />}
-                <NavLink label={link.label} href={link.href} />
-              </React.Fragment>
-            ))}
-            <div style={{ width: "1.5rem" }} />
-            <CTAButton label="Order Pickup" href="#order" />
+          {/* ── DESKTOP LINKS ── */}
+          {!isMobile && (
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.9rem",
+              flex: 1,
+              justifyContent: "center",
+            }}>
+              {NAV_LINKS.map((link, i) => (
+                <React.Fragment key={link.label}>
+                  {i > 0 && <Dot />}
+                  <DesktopLink {...link} scrollOffset={scrollOffset} />
+                </React.Fragment>
+              ))}
+            </div>
+          )}
+
+          {/* ── RIGHT SIDE ── */}
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "1.2rem",
+            flexShrink: 0,
+          }}>
+            {/* Phone — hidden on small screens */}
+            {!isMobile && (
+              <a href="tel:+14157812015" style={{
+                fontFamily: "'Lato', sans-serif",
+                fontWeight: 300,
+                fontSize: "0.73rem",
+                color: "rgba(254,239,220,0.42)",
+                textDecoration: "none",
+                letterSpacing: "0.04em",
+                whiteSpace: "nowrap",
+                transition: "color .22s",
+              }}
+              onMouseEnter={e => e.target.style.color = "rgba(254,239,220,0.75)"}
+              onMouseLeave={e => e.target.style.color = "rgba(254,239,220,0.42)"}
+              >
+                (415) 781-2015
+              </a>
+            )}
+
+            {/* Order CTA */}
+            {!isMobile && <OrderCTA />}
+
+            {/* Hamburger */}
+            {isMobile && (
+              <Hamburger open={open} onClick={() => setOpen(p => !p)} />
+            )}
           </div>
-        )}
 
-        {/* ── Mobile hamburger ── */}
-        {isMobile && (
-          <button
-            onClick={() => setOpen(prev => !prev)}
-            aria-label="Toggle menu"
-            style={{
-              background: "none",
-              border: "none",
-              padding: "4px",
-              cursor: "pointer",
-              lineHeight: 0,
-            }}
-          >
-            <HamburgerIcon open={open} color={COLORS.cream} />
-          </button>
-        )}
-      </div>
+        </div>{/* end inner */}
 
-      {/* ── Mobile dropdown ── */}
-      {isMobile && <MobileMenu open={open} />}
+        {/* ── FROSTING WAVE ── */}
+        <FrostingWave color={navBg} />
 
-      {/* ── Frosting wave drip ── */}
-      {!open && (
-        <FrostingWave
-          fill={scrolled ? "rgba(42,24,14,0.96)" : COLORS.espresso}
-          scrolled={scrolled}
-        />
-      )}
+        {/* ── MOBILE DRAWER ── */}
+        {isMobile && <MobileDrawer open={open} />}
+
+      </div>{/* end main bar */}
     </nav>
   )
 }

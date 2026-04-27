@@ -3,642 +3,848 @@
 get_header();
 ?>
 
-<!-- ═══════════════════════════════════════════
-     VICTORIA PASTRY CO. — HOME TEMPLATE
-════════════════════════════════════════════ -->
-
 <style>
-  @keyframes vp-fade-up {
-    from { opacity: 0; transform: translateY(28px); }
-    to   { opacity: 1; transform: translateY(0); }
+  :root {
+    --vp-dark: #3f1016;
+    --vp-wine: #65333c;
+    --vp-muted: #9d7961;
+    --vp-cream: #feefdc;
+    --vp-rose: #d6bcad;
+
+    --vp-text: #3f1016;
+    --vp-text-soft: rgba(63, 16, 22, 0.72);
+    --vp-border: rgba(63, 16, 22, 0.14);
+    --vp-light-border: rgba(254, 239, 220, 0.16);
   }
+
+  @keyframes vp-fade-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   @keyframes vp-line-grow {
     from { transform: scaleX(0); }
-    to   { transform: scaleX(1); }
+    to { transform: scaleX(1); }
   }
 
-  .vp-hero-eyebrow  { animation: vp-fade-up  .7s  ease both; animation-delay: .1s; }
-  .vp-hero-headline { animation: vp-fade-up  .85s ease both; animation-delay: .28s; }
-  .vp-hero-sub      { animation: vp-fade-up  .8s  ease both; animation-delay: .44s; }
-  .vp-hero-ctas     { animation: vp-fade-up  .75s ease both; animation-delay: .58s; }
-  .vp-hero-rule     { animation: vp-line-grow .9s ease both; animation-delay: .15s; transform-origin: left; }
+  @keyframes vp-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .vp-reveal {
+    opacity: 0;
+    transform: translateY(34px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+
+  .vp-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .vp-hero-eyebrow { animation: vp-fade-up .75s ease both .1s; }
+  .vp-hero-rule    { animation: vp-line-grow .85s ease both .22s; transform-origin: left; }
+  .vp-hero-title   { animation: vp-fade-up .85s ease both .32s; }
+  .vp-hero-sub     { animation: vp-fade-up .85s ease both .48s; }
+  .vp-hero-ctas    { animation: vp-fade-up .85s ease both .62s; }
+
+  .vp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    font-family: 'Lato', sans-serif;
+    font-size: .76rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 0;
+    padding: 15px 30px;
+    transition: transform .22s ease, background-color .22s ease, color .22s ease, border-color .22s ease;
+  }
+
+  .vp-btn:hover { transform: translateY(-2px); }
+
+  .vp-btn-primary {
+    background: var(--vp-cream);
+    color: var(--vp-dark);
+    border: 1px solid var(--vp-cream);
+  }
+  .vp-btn-primary:hover {
+    background: var(--vp-rose);
+    border-color: var(--vp-rose);
+    color: var(--vp-dark);
+  }
+
+  .vp-btn-dark {
+    background: var(--vp-dark);
+    color: var(--vp-cream);
+    border: 1px solid var(--vp-dark);
+  }
+  .vp-btn-dark:hover {
+    background: var(--vp-wine);
+    border-color: var(--vp-wine);
+    color: var(--vp-cream);
+  }
+
+  .vp-btn-outline {
+    background: transparent;
+    color: var(--vp-cream);
+    border: 1px solid rgba(254, 239, 220, .65);
+  }
+  .vp-btn-outline:hover {
+    background: var(--vp-cream);
+    color: var(--vp-dark);
+    border-color: var(--vp-cream);
+  }
+
+  .vp-label {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: .68rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+  }
+
+  .vp-heading {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -.025em;
+  }
+
+  .vp-body {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    line-height: 1.85;
+  }
 
   .vp-grain::after {
     content: "";
     position: absolute;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
     pointer-events: none;
-    opacity: .55;
+    opacity: .22;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
   }
 
-  .vp-qa-card { transition: background-color .25s ease, transform .25s ease; }
-  .vp-qa-card:hover { background-color: rgba(198,156,60,0.12) !important; transform: translateY(-2px); }
-
-  .vp-layer { transition: transform .25s ease, box-shadow .25s ease; }
-  .vp-layer:hover { transform: translateX(8px); box-shadow: -4px 0 0 #C69C3C; }
-
-  .vp-btn-primary { transition: background-color .22s ease, color .22s ease, transform .18s ease; }
-  .vp-btn-primary:hover { background-color: #C69C3C !important; color: #3B2314 !important; transform: translateY(-1px); }
-
-  .vp-btn-secondary { transition: background-color .22s ease, color .22s ease, border-color .22s ease; }
-  .vp-btn-secondary:hover { background-color: #3B2314 !important; color: #F5EFE0 !important; }
-
-  .vp-gold-link { transition: color .2s ease; }
-  .vp-gold-link:hover { color: #F5EFE0 !important; }
-
-  .vp-ornament { display: inline-flex; align-items: center; gap: .6rem; color: #C69C3C; }
-  .vp-ornament::before, .vp-ornament::after { content: ""; display: block; width: 28px; height: 1px; background-color: currentColor; opacity: .6; }
-
-  .vp-carousel { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
-  .vp-carousel > * { scroll-snap-align: start; }
-
-  .vp-quote-marks { font-family: 'Playfair Display', serif; font-size: 6rem; line-height: .6; color: #C69C3C; opacity: .3; user-select: none; }
-
-  /* ── HERO SLIDESHOW ── */
-  @keyframes vp-slide-fade {
-    0%      { opacity: 0; }
-    5.56%   { opacity: 1; }
-    27.78%  { opacity: 1; }
-    33.33%  { opacity: 0; }
-    100%    { opacity: 0; }
+  .vp-qa-card {
+    transition: transform .25s ease, background-color .25s ease;
   }
-  @keyframes vp-kb-1 {
-    0%   { transform: scale(1.00) translate(  0%,   0%); }
-    100% { transform: scale(1.08) translate( -2%,  -1%); }
-  }
-  @keyframes vp-kb-2 {
-    0%   { transform: scale(1.06) translate(  1%, 0.5%); }
-    100% { transform: scale(1.00) translate( -1%,-1.5%); }
-  }
-  @keyframes vp-kb-3 {
-    0%   { transform: scale(1.04) translate(-0.5%,  1%); }
-    100% { transform: scale(1.10) translate( 1.5%,-0.5%); }
+  .vp-qa-card:hover {
+    transform: translateY(-4px);
+    background: rgba(254, 239, 220, .075) !important;
   }
 
-  /* wrapper div that animates */
-  .vp-slide {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    will-change: opacity, transform;
+  .vp-ornament {
+    display: inline-flex;
+    align-items: center;
+    gap: .7rem;
+    color: var(--vp-muted);
+  }
+  .vp-ornament::before,
+  .vp-ornament::after {
+    content: "";
+    display: block;
+    width: 30px;
+    height: 1px;
+    background: currentColor;
+    opacity: .65;
+  }
+
+  /* ─── HERO VIDEO ─────────────────────────────────────────── */
+  .vp-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
     overflow: hidden;
   }
-  /* img fills the wrapper; Ken Burns is on the wrapper */
-  .vp-slide img {
+
+  .vp-hero-video {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .vp-hero-video video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+  }
+
+  /* Multi-layer overlay: dark at bottom + sides for legibility, lighter center */
+  .vp-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(
+        to right,
+        rgba(63,16,22,.88) 0%,
+        rgba(63,16,22,.55) 50%,
+        rgba(63,16,22,.20) 100%
+      ),
+      linear-gradient(
+        to top,
+        rgba(63,16,22,.60) 0%,
+        transparent 50%
+      );
+  }
+
+  /* Grain texture over video */
+  .vp-hero-grain {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: .18;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+  }
+
+  /* Copy sits above everything */
+  .vp-hero-content {
+    position: relative;
+    z-index: 3;
+    padding: 6rem clamp(1.5rem, 6vw, 7rem);
+    padding-top: calc(32px + 72px + 4rem); /* admin bar + navbar height + breathing room */
+    max-width: 780px;
+  }
+
+  /* Thin rose rule left edge */
+  .vp-hero-content::before {
+    content: "";
+    position: absolute;
+    left: clamp(1.5rem, 6vw, 7rem);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 60%;
+    background: linear-gradient(to bottom, transparent, var(--vp-rose), transparent);
+    opacity: .30;
+  }
+
+  /* Est. badge — bottom right of hero */
+  .vp-hero-badge {
+    position: absolute;
+    right: 2rem;
+    bottom: 2.5rem;
+    background: rgba(63,16,22,.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(214,188,173,.30);
+    color: var(--vp-cream);
+    padding: .9rem 1.3rem;
+    z-index: 4;
+  }
+
+  @media (max-width: 768px) {
+    .vp-hero-content { padding: 4rem 1.5rem; padding-top: calc(32px + 72px + 2.5rem); }
+    .vp-hero-content::before { display: none; }
+    .vp-hero-badge { right: 1rem; bottom: 1.5rem; }
+    .vp-btn { width: 100%; }
+  }
+
+  /* ─── CAROUSEL ─────────────────────────────────────────── */
+  .vp-carousel-section {
+    background: var(--vp-cream);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vp-carousel-header {
+    background: var(--vp-wine);
+    padding: 4.5rem 0 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vp-carousel-header::before {
+    content: "1914";
+    position: absolute;
+    right: -1%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(7rem, 16vw, 15rem);
+    color: var(--vp-wine);
+    opacity: .35;
+    pointer-events: none;
+    line-height: 1;
+    letter-spacing: -.04em;
+  }
+
+  .vp-carousel-header::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--vp-rose), transparent);
+  }
+
+  .vp-carousel-cards {
+    margin-top: -3.5rem;
+    padding: 0 0 5rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .vp-carousel {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .vp-carousel > * {
+    scroll-snap-align: start;
+  }
+
+  .vp-flip-card.is-flipped .vp-flip-inner {
+    transform: rotateY(180deg);
+  }
+
+  .vp-card-cta {
+    transition: background-color .2s ease, color .2s ease, transform .2s ease;
+  }
+  .vp-card-cta:hover {
+    background: var(--vp-rose) !important;
+    color: var(--vp-dark) !important;
+    transform: translateY(-2px);
+  }
+
+  .vp-product-front,
+  .vp-product-back {
+    border-radius: 0 !important;
+    box-shadow: 0 20px 55px rgba(63,16,22,.22) !important;
+  }
+  .vp-product-front img {
+    filter: saturate(1.06) contrast(1.03);
+  }
+  .vp-product-front-overlay {
+    background: linear-gradient(
+      to top,
+      rgba(63,16,22,.72) 0%,
+      rgba(63,16,22,.30) 36%,
+      rgba(63,16,22,.03) 68%
+    ) !important;
+  }
+
+  /* ─── PRINCESS CAKE FEATURE ────────────────────────────── */
+  .vp-layer {
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .vp-layer:hover {
+    transform: translateX(8px);
+    box-shadow: -4px 0 0 var(--vp-muted);
+  }
+
+  .vp-square-box { border-radius: 0 !important; }
+
+  .vp-feature-media {
+    position: relative;
+  }
+
+  .vp-feature-main-img {
+    width: 100%;
+    height: 580px;
+    object-fit: cover;
+    object-position: center top;
     display: block;
   }
 
-  .vp-slide:nth-child(1) { animation: vp-slide-fade 18s ease-in-out infinite 0s,  vp-kb-1 18s ease-in-out infinite 0s; }
-  .vp-slide:nth-child(2) { animation: vp-slide-fade 18s ease-in-out infinite 6s,  vp-kb-2 18s ease-in-out infinite 6s; }
-  .vp-slide:nth-child(3) { animation: vp-slide-fade 18s ease-in-out infinite 12s, vp-kb-3 18s ease-in-out infinite 12s; }
-
-  .vp-slide-blend-left {
-    position: absolute; inset: 0;
-    background: linear-gradient(to right, #F5EFE0 0%, rgba(245,239,224,.6) 12%, transparent 35%);
-    pointer-events: none; z-index: 2;
-  }
-  .vp-slide-blend-bottom {
-    position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(59,35,20,.35) 0%, transparent 50%);
-    pointer-events: none; z-index: 2;
+  .vp-feature-slide-img {
+    position: absolute;
+    right: -24px;
+    bottom: -24px;
+    width: 38%;
+    height: 260px;
+    object-fit: cover;
+    object-position: center;
+    border: 6px solid var(--vp-cream);
+    box-shadow: 0 20px 55px rgba(63,16,22,.30);
+    z-index: 3;
   }
 
-  @keyframes vp-dot-pulse {
-    0%      { opacity: .35; transform: scale(1); }
-    5.56%   { opacity: 1;   transform: scale(1.4); }
-    27.78%  { opacity: 1;   transform: scale(1.4); }
-    33.33%  { opacity: .35; transform: scale(1); }
-    100%    { opacity: .35; transform: scale(1); }
+  .vp-feature-stamp {
+    position: absolute;
+    left: 18px;
+    top: 18px;
+    background: var(--vp-dark);
+    color: var(--vp-cream);
+    padding: .9rem 1.1rem;
+    box-shadow: 0 14px 40px rgba(63,16,22,.32);
+    animation: vp-float 4s ease-in-out infinite;
+    z-index: 4;
   }
 
-  /* ── FLIP CARDS ── */
-  .vp-flip-card.is-flipped .vp-flip-inner { transform: rotateY(180deg); }
-  .vp-card-cta { transition: background-color .2s ease, color .2s ease; }
-  .vp-card-cta:hover { background-color: #C69C3C !important; color: #3B2314 !important; }
-  @keyframes vp-hint-bounce {
-    0%, 100% { transform: translateY(0);   opacity: .55; }
-    50%       { transform: translateY(-3px); opacity: .9; }
+  .vp-trustindex-wrap .ti-widget,
+  .vp-trustindex-wrap iframe {
+    max-width: 100%;
   }
-  .vp-flip-hint { animation: vp-hint-bounce 2.2s ease-in-out infinite; }
+
+  /* ─── QUICK ACTIONS (now attached directly to carousel, no divider) ─── */
+  .vp-quick-actions {
+    background: var(--vp-dark);
+    position: relative;
+  }
+
+  /* ─── RESPONSIVE ────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .vp-feature-main-img { height: 480px; }
+
+    .vp-feature-slide-img {
+      position: relative;
+      right: auto;
+      bottom: auto;
+      width: 60%;
+      height: 220px;
+      margin: 1.2rem 0 0 auto;
+      display: block;
+      border: 5px solid var(--vp-cream);
+    }
+
+    .vp-feature-stamp {
+      position: relative;
+      left: auto;
+      top: auto;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .vp-feature-main-img { height: 360px; }
+
+    .vp-feature-slide-img {
+      width: 72%;
+      height: 190px;
+    }
+
+    .vp-carousel-header { padding: 3.5rem 0 4.5rem; }
+  }
 </style>
 
-
-<!-- ████████████████████████████████████████
-     §1  HERO
-████████████████████████████████████████ -->
 <?php
-/*
- * HERO SLIDESHOW IMAGES
- * Cambia cada 'src' por la ruta de tu imagen.
- * Puedes usar /wp-content/uploads/... o get_template_directory_uri() . '/images/...'
- */
-$vp_hero_slides = [
+$vp_products = [
   [
-    'src' => '/wp-content/uploads/2026/04/HeroVPastry1-scaled.jpg',
-    'alt' => 'Victoria Pastry — slide 1',
+    'name'       => 'Princess Cake',
+    'badge'      => 'Signature',
+    'desc'       => 'Vanilla sponge, triple sec, raspberry jam, pastry cream — draped in green marzipan. Made the same way since 1914.',
+    'price'      => 'Slice $6.75',
+    'price_full' => 'Sheet from $82.99',
+    'href'       => '#princess-cake',
+    'img'        => '/wp-content/uploads/2026/04/DSC03847.jpg',
   ],
   [
-    'src' => '/wp-content/uploads/2026/04/HeroVPastry1-scaled.jpg', /* ← cambia por slide 2 */
-    'alt' => 'Victoria Pastry — slide 2',
+    'name'       => 'Cannoli',
+    'badge'      => 'Nominated Best in SF',
+    'desc'       => 'Crisp shell, sweetened ricotta, chocolate chips. Nominated Best Cannoli in San Francisco.',
+    'price'      => '$7.50 each',
+    'price_full' => null,
+    'href'       => '#order',
+    'img'        => '/wp-content/uploads/2026/04/DSC04171.jpg',
   ],
   [
-    'src' => '/wp-content/uploads/2026/04/HeroVPastry1-scaled.jpg', /* ← cambia por slide 3 */
-    'alt' => 'Victoria Pastry — slide 3',
+    'name'       => 'St. Honore',
+    'badge'      => null,
+    'desc'       => 'A classic from the original 1914 recipes. Puff pastry, pastry cream, caramelized choux.',
+    'price'      => 'Slice $7.50',
+    'price_full' => null,
+    'href'       => '#order',
+    'img'        => '/wp-content/uploads/2026/04/DSC03618.jpg',
   ],
 ];
 ?>
 
-<section class="vp-grain relative" style="background-color:#F5EFE0; min-height:calc(100vh - 68px); display:grid; grid-template-columns:1fr; overflow:hidden;">
-  <div class="grid grid-cols-1 lg:grid-cols-2" style="min-height:calc(100vh - 68px);">
+<main class="vp-home" style="background:var(--vp-cream); color:var(--vp-text); overflow:hidden;">
 
-    <!-- LEFT — text -->
-    <div style="background-color:#F5EFE0; background-image:radial-gradient(ellipse 80% 60% at 0% 100%, rgba(198,156,60,.07) 0%, transparent 65%); display:flex; align-items:center; padding:calc(54px + 4rem) 3.5rem 4rem; position:relative; z-index:1;">
-      <div class="hidden lg:block absolute left-8 top-0 bottom-0 w-px" style="background:linear-gradient(to bottom, transparent, rgba(198,156,60,.25), transparent);"></div>
-      <div style="max-width:520px; width:100%;">
+  <!-- HERO — VIDEO BACKGROUND -->
+  <section class="vp-hero">
 
-        <div class="vp-hero-eyebrow flex flex-wrap items-center gap-3 mb-7">
-          <span style="font-family:'Lato',sans-serif; font-weight:300; font-size:.68rem; letter-spacing:.22em; text-transform:uppercase; color:#B85C38;">North Beach, San Francisco</span>
-          <span style="display:inline-block; width:3px; height:3px; border-radius:50%; background:#C69C3C; opacity:.7;"></span>
-          <span style="font-family:'Lato',sans-serif; font-weight:300; font-size:.68rem; letter-spacing:.22em; text-transform:uppercase; color:#B85C38;">Est. 1914</span>
-        </div>
+    <!-- Video layer -->
+    <div class="vp-hero-video">
+      <video autoplay muted loop playsinline preload="auto">
+        <source src="/wp-content/uploads/2026/04/Diseno-sin-titulo.mp4" type="video/mp4">
+      </video>
+    </div>
 
-        <div class="vp-hero-rule mb-8" style="width:56px; height:1.5px; background:#C69C3C;"></div>
+    <!-- Dark gradient overlay -->
+    <div class="vp-hero-overlay"></div>
 
-        <h1 class="vp-hero-headline" style="font-family:'Playfair Display',serif; font-style:italic; font-weight:700; font-size:clamp(2.8rem,5.5vw,5.5rem); line-height:1.0; letter-spacing:-.02em; color:#3B2314; margin-bottom:1.75rem;">Authentic<br>Since 1914.</h1>
+    <!-- Grain texture -->
+    <div class="vp-hero-grain"></div>
 
-        <p class="vp-hero-sub" style="font-family:'Lato',sans-serif; font-weight:300; font-size:clamp(.875rem,1.4vw,1rem); line-height:1.85; color:rgba(59,35,20,.6); margin-bottom:2.75rem; max-width:42ch;">Over a century of Italian pastry, made the same way — by Italian families who understood that some recipes should never change.</p>
+    <!-- Copy -->
+    <div class="vp-hero-content">
 
-        <div class="vp-hero-ctas flex flex-wrap items-center gap-4">
-          <a href="#order" class="vp-btn-primary" style="font-family:'Lato',sans-serif; font-weight:400; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; text-decoration:none; display:inline-block; padding:14px 36px; background-color:#3B2314; color:#F5EFE0; border-radius:2px;">Order Pickup</a>
-          <a href="#catering" class="vp-btn-secondary" style="font-family:'Lato',sans-serif; font-weight:300; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; text-decoration:none; display:inline-block; padding:13px 36px; border:1.5px solid #3B2314; color:#3B2314; border-radius:2px;">Catering</a>
-        </div>
-
+      <div class="vp-hero-eyebrow flex flex-wrap items-center gap-3 mb-7">
+        <span class="vp-label" style="color:var(--vp-rose);">North Beach, San Francisco</span>
+        <span style="width:4px; height:4px; background:var(--vp-rose); opacity:.5;"></span>
+        <span class="vp-label" style="color:var(--vp-rose);">Est. 1914</span>
       </div>
-    </div><!-- /left -->
 
-    <!-- RIGHT — slideshow -->
-    <div class="relative overflow-hidden" style="min-height:380px;">
+      <div class="vp-hero-rule mb-8" style="width:72px; height:2px; background:var(--vp-rose);"></div>
 
-      <?php foreach ( $vp_hero_slides as $slide ) : ?>
-      <div class="vp-slide">
-        <img
-          src="<?php echo esc_url( $slide['src'] ); ?>"
-          alt="<?php echo esc_attr( $slide['alt'] ); ?>"
-        />
+      <h1 class="vp-hero-title vp-heading" style="font-size:clamp(3rem,5.5vw,5.8rem); color:var(--vp-cream); margin:0 0 1.65rem;">
+        Authentic<br>Since 1914.
+      </h1>
+
+      <p class="vp-hero-sub vp-body" style="font-size:clamp(.95rem,1.4vw,1.08rem); color:rgba(254,239,220,.78); max-width:44ch; margin:0 0 2.75rem;">
+        Over a century of Italian pastry, made the same way — by Italian families who understood that some recipes should never change.
+      </p>
+
+      <div class="vp-hero-ctas flex flex-wrap gap-4">
+        <a href="#order" class="vp-btn vp-btn-primary">Order Pickup</a>
+        <a href="#catering" class="vp-btn vp-btn-outline">Catering</a>
       </div>
-      <?php endforeach; ?>
 
-      <div class="vp-slide-blend-left hidden lg:block"></div>
-      <div class="vp-slide-blend-bottom lg:hidden"></div>
+    </div>
 
-      <!-- dots -->
-      <div style="position:absolute; bottom:1.25rem; left:50%; transform:translateX(-50%); display:flex; gap:.5rem; z-index:3;" aria-hidden="true">
-        <?php foreach ( $vp_hero_slides as $i => $slide ) : $dot_delay = $i * 6; ?>
-        <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#F5EFE0; opacity:.35; animation:vp-dot-pulse 18s infinite <?php echo $dot_delay; ?>s;"></span>
+    <!-- Est. badge bottom-right -->
+    <div class="vp-hero-badge vp-square-box">
+      <div class="vp-label" style="color:var(--vp-rose); font-size:.52rem; margin-bottom:4px;">North Beach</div>
+      <div class="vp-heading" style="font-size:1.1rem; color:var(--vp-cream);">700 Filbert St.</div>
+    </div>
+
+  </section>
+
+  <!-- QUICK ACTIONS — directly attached to carousel section, no divider -->
+  <section class="vp-quick-actions">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-2 lg:grid-cols-4">
+        <?php
+        $qa_items = [
+          ['label'=>'Order Pickup',   'body'=>'Same-day pickup',    'sub'=>'700 Filbert St',   'href'=>'#menu'],
+          ['label'=>'Catering',       'body'=>'Weddings · Events',  'sub'=>'Delivery 50 miles','href'=>'#catering'],
+          ['label'=>'Princess Cake',  'body'=>"SF's most beloved",  'sub'=>'Italian cake',     'href'=>'#princess-cake'],
+          ['label'=>'Visit Us',       'body'=>'Open daily 7am–8pm', 'sub'=>'North Beach, SF',  'href'=>'#visit'],
+        ];
+        foreach ($qa_items as $item) :
+        ?>
+          <a href="<?php echo esc_attr($item['href']); ?>" class="vp-qa-card vp-reveal no-underline px-5 py-8 text-center flex flex-col items-center gap-2" style="border-right:1px solid rgba(254,239,220,.08); border-bottom:1px solid rgba(254,239,220,.08);">
+            <span class="vp-label" style="color:var(--vp-rose);"><?php echo esc_html($item['label']); ?></span>
+            <span class="vp-body" style="font-size:.82rem; color:rgba(254,239,220,.74); line-height:1.45;"><?php echo esc_html($item['body']); ?></span>
+            <span style="font-family:'Lato',sans-serif; font-size:.73rem; color:rgba(254,239,220,.45); letter-spacing:.06em;"><?php echo esc_html($item['sub']); ?></span>
+          </a>
         <?php endforeach; ?>
       </div>
-
-    </div><!-- /right -->
-  </div>
-</section>
-
-
-<!-- ████████████████████████████████████████
-     §2  QUICK ACTIONS BAR
-████████████████████████████████████████ -->
-
-<style>
-  /*
-   * Uiverse pattern by csemszepp — adapted palette:
-   *   --c1 #f7d2a1 (light peach) → #C69C3C gold
-   *   --c2 #05057e (deep blue)   → #2A180E espresso dark
-   */
-  .vp-qa-pattern {
-    --s:  150px;
-    --c1: #C69C3C;
-    --c2: #2A180E;
-    --_g: var(--c1) 0% 5%, var(--c2) 6% 15%, var(--c1) 16% 25%, var(--c2) 26% 35%,
-          var(--c1) 36% 45%, var(--c2) 46% 55%, var(--c1) 56% 65%, var(--c2) 66% 75%,
-          var(--c1) 76% 85%, var(--c2) 86% 95%, #0000 96%;
-    position: absolute;
-    inset: 0;
-    opacity: 0.10;
-    pointer-events: none;
-    background:
-      radial-gradient(50% 50% at 100% 0,   var(--_g)),
-      radial-gradient(50% 50% at 0 100%,   var(--_g)),
-      radial-gradient(50% 50%,             var(--_g)),
-      radial-gradient(50% 50%,             var(--_g)) calc(var(--s) / 2) calc(var(--s) / 2) var(--c1);
-    background-size: var(--s) var(--s);
-  }
-</style>
-
-<section style="background-color:#3B2314; position:relative; z-index:1;">
-
-  <!-- Uiverse burst pattern -->
-  <div class="vp-qa-pattern" aria-hidden="true"></div>
-  <div style="height:2px; background:linear-gradient(90deg,transparent,#C69C3C,transparent); opacity:.5;"></div>
-  <div class="max-w-6xl mx-auto">
-    <div class="grid grid-cols-2 lg:grid-cols-4">
-      <?php
-      $qa_items = [
-        [ 'glyph'=>'🥐', 'label'=>'Order Pickup',  'body'=>'Same-day pickup',    'sub'=>'700 Filbert St',    'href'=>'#order',         'border'=>true  ],
-        [ 'glyph'=>'🎂', 'label'=>'Catering',       'body'=>'Weddings · Events',  'sub'=>'Delivery 50 miles', 'href'=>'#catering',      'border'=>true  ],
-        [ 'glyph'=>'✦',  'label'=>'Princess Cake',  'body'=>"SF's most beloved",  'sub'=>'Italian cake',      'href'=>'#princess-cake', 'border'=>true  ],
-        [ 'glyph'=>'📍', 'label'=>'Visit Us',        'body'=>'Open daily 7am–8pm', 'sub'=>'North Beach, SF',   'href'=>'#visit',         'border'=>false ],
-      ];
-      foreach ($qa_items as $item) :
-        $border_r = $item['border'] ? 'border-r border-r-[rgba(245,239,224,0.07)]' : '';
-      ?>
-      <a href="<?php echo esc_attr($item['href']); ?>" class="vp-qa-card <?php echo $border_r; ?> flex flex-col items-center text-center gap-2 px-5 py-8 no-underline" style="background-color:transparent; border-bottom:1px solid rgba(245,239,224,.06);">
-        <span style="font-size:1.4rem; opacity:.85; margin-bottom:2px;"><?php echo $item['glyph']; ?></span>
-        <span style="font-family:'Lato',sans-serif; font-weight:400; font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:#C69C3C;"><?php echo esc_html($item['label']); ?></span>
-        <span style="font-family:'Lato',sans-serif; font-weight:300; font-size:.78rem; color:rgba(245,239,224,.65); line-height:1.5;"><?php echo esc_html($item['body']); ?></span>
-        <span style="font-family:'Lato',sans-serif; font-weight:300; font-size:.72rem; color:rgba(245,239,224,.35); letter-spacing:.05em;"><?php echo esc_html($item['sub']); ?></span>
-      </a>
-      <?php endforeach; ?>
     </div>
-  </div>
-  <div style="height:1px; background:linear-gradient(90deg,transparent,rgba(198,156,60,.2),transparent);"></div>
-</section>
+  </section>
 
+  <!-- PRODUCT CAROUSEL -->
+<section id="menu" class="vp-carousel-section">
 
-<!-- ████████████████████████████████████████
-     §3  PRODUCT CAROUSEL — FLIP CARDS
-████████████████████████████████████████ -->
-<section style="background-color:#FAF6ED; padding:6rem 0;">
-
-  <div class="max-w-6xl mx-auto px-6 mb-14">
-    <div class="vp-ornament mb-4">
-      <span style="font-family:'Lato',sans-serif; font-weight:300; font-size:.65rem; letter-spacing:.26em; text-transform:uppercase; color:#C69C3C;">From Our Cases</span>
+    <!-- Dark header band with headline -->
+    <div class="vp-carousel-header">
+      <div class="max-w-7xl mx-auto px-6 vp-reveal" style="position:relative; z-index:2;">
+        <div class="vp-ornament mb-5">
+          <span class="vp-label" style="color:var(--vp-rose);">From Our Cases</span>
+        </div>
+        <h2 class="vp-heading" style="font-size:clamp(2.4rem,5vw,4rem); color:var(--vp-cream); margin:0 0 1.1rem;">
+          Made Fresh.<br>Every Morning.
+        </h2>
+        <p class="vp-body" style="font-size:.92rem; color:rgba(254,239,220,.58); max-width:46ch; margin:0;">
+          Italian pastry made from scratch — the same recipes, the same hands, since 1914.
+        </p>
+      </div>
     </div>
-    <h2 style="font-family:'Playfair Display',serif; font-style:italic; font-weight:700; font-size:clamp(2rem,4.5vw,3.2rem); color:#3B2314; line-height:1.1;">Made Fresh.<br>Every Morning.</h2>
-  </div>
 
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="vp-carousel flex lg:grid lg:grid-cols-3 gap-8 overflow-x-auto pb-6 lg:overflow-visible lg:pb-0">
+    <!-- Cards pulling up over the dark band -->
+    <div class="vp-carousel-cards">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="vp-carousel flex xl:grid xl:grid-cols-3 gap-8 overflow-x-auto pb-2 xl:overflow-visible xl:pb-0">
+          <?php foreach ($vp_products as $p) : ?>
+            <div class="vp-flip-card vp-reveal flex-shrink-0 relative [perspective:1000px] cursor-pointer" style="height:460px; min-width:340px;" onclick="this.classList.toggle('is-flipped')">
+              <div class="vp-flip-inner group absolute w-full h-full [transform-style:preserve-3d] [transition:transform_0.75s_cubic-bezier(0.4,0.2,0.2,1)] hover:[transform:rotateY(180deg)]">
 
-      <?php
-      $products = [
-        [
-          'name'       => 'Princess Cake',
-          'badge'      => 'Signature',
-          'badge_c'    => '#6B8F3A',
-          'desc'       => 'Vanilla sponge, triple sec, raspberry jam, pastry cream — draped in green marzipan. Made the same way since 1914.',
-          'price'      => 'Slice $6.75',
-          'price_full' => 'Sheet from $82.99',
-          'href'       => '#princess-cake',
-          'accent'     => '#6B8F3A',
-          'img'        => '/wp-content/uploads/2026/04/PrincesCake-scaled.jpg',
-        ],
-        [
-          'name'       => 'Cannoli',
-          'badge'      => 'Best in SF',
-          'badge_c'    => '#B85C38',
-          'desc'       => 'Crisp shell, sweetened ricotta, chocolate chips. Nominated Best Cannoli in San Francisco.',
-          'price'      => '$7.50 each',
-          'price_full' => null,
-          'href'       => '#order',
-          'accent'     => '#B85C38',
-          'img'        => '/wp-content/uploads/2026/04/Canoli-scaled.jpg',
-        ],
-        [
-          'name'       => 'St. Honoré',
-          'badge'      => null,
-          'badge_c'    => null,
-          'desc'       => 'A classic from the original 1914 recipes. Puff pastry, pastry cream, caramelized choux.',
-          'price'      => 'Slice $7.50',
-          'price_full' => null,
-          'href'       => '#order',
-          'accent'     => '#C69C3C',
-          'img'        => '/wp-content/uploads/2026/04/StHonore-scaled.jpg',
-        ],
-      ];
-      foreach ( $products as $p ) :
-      ?>
+                <!-- FRONT -->
+                <div class="vp-product-front absolute w-full h-full overflow-hidden [backface-visibility:hidden]">
+                  <img src="<?php echo esc_url($p['img']); ?>" alt="<?php echo esc_attr($p['name']); ?>" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center;">
+                  <div class="vp-product-front-overlay" style="position:absolute; inset:0;"></div>
 
-      <div class="vp-flip-card flex-shrink-0 relative [perspective:1000px] cursor-pointer" style="height:440px; min-width:280px;" onclick="this.classList.toggle('is-flipped')">
-        <div class="vp-flip-inner group absolute w-full h-full [transform-style:preserve-3d] [transition:transform_0.75s_cubic-bezier(0.4,0.2,0.2,1)] hover:[transform:rotateY(180deg)]">
+                  <?php if ($p['badge']) : ?>
+                    <div class="vp-label" style="position:absolute; top:1rem; right:1rem; color:var(--vp-dark); background:rgba(254,239,220,.94); border:1px solid rgba(63,16,22,.18); padding:7px 12px; border-radius:0; font-size:.55rem;">
+                      <?php echo esc_html($p['badge']); ?>
+                    </div>
+                  <?php endif; ?>
 
-          <!-- FRONT -->
-          <div class="absolute w-full h-full overflow-hidden [backface-visibility:hidden]" style="border-radius:4px;">
-            <img
-              src="<?php echo esc_url($p['img']); ?>"
-              alt="<?php echo esc_attr($p['name']); ?>"
-              style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center;"
-            />
-            <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(42,18,10,.88) 0%, rgba(42,18,10,.4) 35%, transparent 65%);"></div>
-            <div style="position:absolute; top:0; left:0; right:0; height:3px; background:<?php echo esc_attr($p['accent']); ?>;"></div>
-            <?php if ($p['badge']) : ?>
-            <div style="position:absolute; top:1rem; right:1rem; font-family:'Lato',sans-serif; font-weight:400; font-size:.58rem; letter-spacing:.14em; text-transform:uppercase; color:<?php echo esc_attr($p['badge_c']); ?>; background:rgba(245,239,224,.92); border:1px solid <?php echo esc_attr($p['badge_c']); ?>; padding:4px 9px; border-radius:2px; backdrop-filter:blur(4px);"><?php echo esc_html($p['badge']); ?></div>
-            <?php endif; ?>
-            <div style="position:absolute; bottom:0; left:0; right:0; padding:1.5rem 1.5rem 1.25rem;">
-              <h3 style="font-family:'Playfair Display',serif; font-style:italic; font-weight:700; font-size:1.5rem; color:#F5EFE0; line-height:1.1; margin:0 0 .6rem;"><?php echo esc_html($p['name']); ?></h3>
-              <p class="vp-flip-hint" style="font-family:'Lato',sans-serif; font-weight:300; font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; color:rgba(245,239,224,.55); margin:0; display:flex; align-items:center; gap:.4rem;">
-                <span style="font-size:.75rem;">↻</span> Discover
-              </p>
-            </div>
-          </div><!-- /front -->
+                  <div style="position:absolute; bottom:0; left:0; right:0; padding:1.75rem;">
+                    <h3 class="vp-heading" style="font-size:1.9rem; color:var(--vp-cream); margin:0 0 .65rem;">
+                      <?php echo esc_html($p['name']); ?>
+                    </h3>
+                    <p class="vp-label" style="color:rgba(254,239,220,.72); margin:0;">↻ Discover</p>
+                  </div>
+                </div>
 
-          <!-- BACK -->
-          <div class="absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)]" style="background-color:#2A180E; border-radius:4px; overflow:hidden;">
-            <div style="height:3px; background:<?php echo esc_attr($p['accent']); ?>;"></div>
-            <div style="position:absolute; inset:0; background:radial-gradient(ellipse 80% 60% at 50% 110%, rgba(198,156,60,.09) 0%, transparent 65%); pointer-events:none;"></div>
-            <div style="padding:1.75rem 1.75rem 1.5rem; height:calc(100% - 3px); display:flex; flex-direction:column; gap:1rem; position:relative;">
-              <?php if ($p['badge']) : ?>
-              <span style="align-self:flex-start; font-family:'Lato',sans-serif; font-weight:400; font-size:.58rem; letter-spacing:.14em; text-transform:uppercase; color:<?php echo esc_attr($p['badge_c']); ?>; border:1px solid <?php echo esc_attr($p['badge_c']); ?>; padding:4px 10px; border-radius:2px;"><?php echo esc_html($p['badge']); ?></span>
-              <?php endif; ?>
-              <h3 style="font-family:'Playfair Display',serif; font-style:italic; font-weight:700; font-size:1.5rem; color:#F5EFE0; line-height:1.1; margin:0;"><?php echo esc_html($p['name']); ?></h3>
-              <div style="height:1px; background:rgba(198,156,60,.25);"></div>
-              <p style="font-family:'Lato',sans-serif; font-weight:300; font-size:.82rem; line-height:1.75; color:rgba(245,239,224,.65); margin:0; flex:1;"><?php echo esc_html($p['desc']); ?></p>
-              <div style="display:flex; flex-direction:column; gap:.25rem; padding:.75rem 0; border-top:1px solid rgba(245,239,224,.07); border-bottom:1px solid rgba(245,239,224,.07);">
-                <span style="font-family:'Playfair Display',serif; font-style:italic; font-size:1.1rem; color:<?php echo esc_attr($p['accent']); ?>;"><?php echo esc_html($p['price']); ?></span>
-                <?php if ($p['price_full']) : ?>
-                <span style="font-family:'Lato',sans-serif; font-weight:300; font-size:.72rem; letter-spacing:.05em; color:rgba(245,239,224,.35);"><?php echo esc_html($p['price_full']); ?></span>
-                <?php endif; ?>
+                <!-- BACK -->
+                <div class="vp-product-back absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)]" style="background:var(--vp-dark); overflow:hidden;">
+                  <div style="height:5px; background:var(--vp-muted);"></div>
+                  <div style="padding:1.8rem; height:calc(100% - 5px); display:flex; flex-direction:column; gap:1rem;">
+                    <?php if ($p['badge']) : ?>
+                      <span class="vp-label" style="align-self:flex-start; color:var(--vp-rose); border:1px solid rgba(214,188,173,.45); border-radius:0; padding:6px 12px; font-size:.55rem;">
+                        <?php echo esc_html($p['badge']); ?>
+                      </span>
+                    <?php endif; ?>
+
+                    <h3 class="vp-heading" style="font-size:1.65rem; color:var(--vp-cream); margin:0;">
+                      <?php echo esc_html($p['name']); ?>
+                    </h3>
+
+                    <div style="height:1px; background:rgba(254,239,220,.14);"></div>
+
+                    <p class="vp-body" style="font-size:.88rem; color:rgba(254,239,220,.74); margin:0; flex:1;">
+                      <?php echo esc_html($p['desc']); ?>
+                    </p>
+
+                    <div style="border-top:1px solid rgba(254,239,220,.12); border-bottom:1px solid rgba(254,239,220,.12); padding:.8rem 0;">
+                      <div class="vp-heading" style="font-size:1.12rem; color:var(--vp-rose);">
+                        <?php echo esc_html($p['price']); ?>
+                      </div>
+                      <?php if ($p['price_full']) : ?>
+                        <div class="vp-body" style="font-size:.74rem; color:rgba(254,239,220,.48);">
+                          <?php echo esc_html($p['price_full']); ?>
+                        </div>
+                      <?php endif; ?>
+                    </div>
+
+                    <a href="<?php echo esc_url($p['href']); ?>" class="vp-card-cta vp-label" style="display:block; text-align:center; text-decoration:none; color:var(--vp-cream); background:var(--vp-wine); padding:13px 18px; border-radius:0;">
+                      Order Pickup
+                    </a>
+                  </div>
+                </div>
+
               </div>
-              <a href="<?php echo esc_url($p['href']); ?>" class="vp-card-cta" onclick="event.stopPropagation()" style="font-family:'Lato',sans-serif; font-weight:400; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; text-decoration:none; display:flex; align-items:center; justify-content:center; padding:11px 0; border:1.5px solid <?php echo esc_attr($p['accent']); ?>; color:<?php echo esc_attr($p['accent']); ?>; border-radius:2px; text-align:center;">Order Now</a>
             </div>
-          </div><!-- /back -->
-
+          <?php endforeach; ?>
         </div>
       </div>
-
-      <?php endforeach; ?>
     </div>
-  </div>
-</section>
+  </section>
 
+  <!-- PRINCESS CAKE FEATURE -->
+  <section id="princess-cake" style="background:var(--vp-rose); padding:7rem 0; position:relative; overflow:hidden;">
+    <div style="position:absolute; right:-4%; top:8%; font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(6rem,15vw,14rem); color:var(--vp-dark); opacity:.06; pointer-events:none;">Princess</div>
 
-<!-- ████████████████████████████████████████
-     §4  PRINCESS CAKE FEATURE
-████████████████████████████████████████ -->
-<section id="princess-cake" style="background-color:#F5EFE0; padding:7rem 0; position:relative; overflow:hidden;">
-  <div style="position:absolute; right:-2%; top:50%; transform:translateY(-50%); font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(6rem,14vw,13rem); color:#6B8F3A; opacity:.04; pointer-events:none; user-select:none; white-space:nowrap; line-height:1;">Princess</div>
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+    <div class="max-w-7xl mx-auto px-6 relative">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
 
-      <div>
-        <div class="vp-ornament mb-5"><span style="font-family:'Lato',sans-serif; font-weight:300; font-size:.65rem; letter-spacing:.26em; text-transform:uppercase; color:#6B8F3A;">Our Signature</span></div>
-        <h2 style="font-family:'Playfair Display',serif; font-weight:700; font-size:clamp(1.9rem,4vw,3rem); color:#3B2314; line-height:1.1; margin-bottom:.4rem;">The Princess Cake.</h2>
-        <h3 style="font-family:'Playfair Display',serif; font-style:italic; font-weight:400; font-size:clamp(1.2rem,2.5vw,1.6rem); color:#6B8F3A; margin-bottom:1.75rem;">Since 1914.</h3>
-        <p style="font-family:'Lato',sans-serif; font-weight:300; font-size:.92rem; line-height:1.85; color:rgba(59,35,20,.7); margin-bottom:2.25rem; max-width:44ch;">San Francisco has been celebrating with this cake for over a century. Vanilla sponge, triple sec, raspberry jam, pastry cream — draped in green marzipan. Every layer made from scratch. Every time.</p>
-        <div class="grid grid-cols-3 gap-4 mb-8">
-          <?php
-          $prices = [
-            ['label'=>'Slice',      'price'=>'$6.75'],
-            ['label'=>'Sheet Cake', 'price'=>'From $82.99'],
-            ['label'=>'Custom',     'price'=>'Call us'],
-          ];
-          foreach ($prices as $pr) :
-          ?>
-          <div style="border-top:2px solid #C69C3C; padding-top:.75rem;">
-            <div style="font-family:'Lato',sans-serif; font-weight:300; font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:rgba(59,35,20,.45); margin-bottom:.25rem;"><?php echo esc_html($pr['label']); ?></div>
-            <div style="font-family:'Playfair Display',serif; font-style:italic; font-size:1.05rem; color:#3B2314; font-weight:700;"><?php echo esc_html($pr['price']); ?></div>
+        <!-- LEFT: Media block -->
+        <div class="vp-reveal vp-feature-media" style="position:relative; padding-bottom:2rem; padding-right:2rem;">
+
+          <div class="vp-feature-stamp vp-square-box">
+            <div class="vp-label" style="color:var(--vp-rose); font-size:.56rem;">Our Signature</div>
+            <div class="vp-heading" style="font-size:1.25rem;">Since 1914.</div>
           </div>
-          <?php endforeach; ?>
-        </div>
-        <a href="#order" class="vp-btn-primary" style="font-family:'Lato',sans-serif; font-weight:400; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; text-decoration:none; display:inline-block; padding:14px 32px; background-color:#6B8F3A; color:#F5EFE0; border-radius:2px;">Order the Princess Cake</a>
-      </div>
 
-      <div style="position:relative;">
-        <div style="background-color:#fff; border:1px solid rgba(59,35,20,.08); border-radius:4px; padding:2.5rem 2rem; box-shadow:0 8px 40px rgba(59,35,20,.08); position:relative; overflow:hidden;">
-          <div style="position:absolute; top:0; right:0; width:60px; height:60px; background:linear-gradient(225deg,rgba(107,143,58,.15) 0%,transparent 60%);"></div>
-          <div style="font-family:'Lato',sans-serif; font-weight:300; font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; color:rgba(59,35,20,.35); margin-bottom:1.5rem;">Every layer · Made from scratch</div>
-          <?php
-          $layers = [
-            ['label'=>'Green Marzipan Dome',        'color'=>'#6B8F3A', 'text_c'=>'#fff'],
-            ['label'=>'Pastry Cream',               'color'=>'#F5EFE0', 'text_c'=>'#3B2314', 'border'=>'rgba(59,35,20,.15)'],
-            ['label'=>'Raspberry Jam',              'color'=>'#B85C38', 'text_c'=>'#fff'],
-            ['label'=>'Vanilla Sponge & Triple Sec','color'=>'#E8D9B5', 'text_c'=>'#3B2314', 'border'=>'rgba(59,35,20,.15)'],
-          ];
-          foreach ($layers as $i => $layer) :
-            $border_style = isset($layer['border']) ? "border:1px solid {$layer['border']};" : '';
-          ?>
-          <div class="vp-layer" style="background-color:<?php echo esc_attr($layer['color']); ?>; <?php echo $border_style; ?> padding:.85rem 1.25rem; margin-bottom:3px; border-radius:2px; display:flex; align-items:center; justify-content:space-between; cursor:default;">
-            <span style="font-family:'Lato',sans-serif; font-weight:<?php echo $i===0?'400':'300'; ?>; font-size:.78rem; letter-spacing:.04em; color:<?php echo esc_attr($layer['text_c']); ?>;"><?php echo esc_html($layer['label']); ?></span>
-            <span style="font-family:'Lato',sans-serif; font-weight:300; font-size:.6rem; letter-spacing:.1em; color:<?php echo esc_attr($layer['text_c']); ?>; opacity:.55; text-transform:uppercase;">Layer <?php echo $i+1; ?></span>
+          <div class="vp-square-box" style="overflow:hidden; box-shadow:0 30px 80px rgba(63,16,22,.26); border:8px solid rgba(254,239,220,.30);">
+            <img class="vp-feature-main-img" src="/wp-content/uploads/2026/04/DSC03841-rotated.jpg" alt="Victoria Pastry Princess Cake">
           </div>
-          <?php endforeach; ?>
-          <div style="margin-top:1.25rem; font-family:'Playfair Display',serif; font-style:italic; font-size:.8rem; color:rgba(59,35,20,.4); text-align:center;">Unchanged since 1914.</div>
+
+          <img class="vp-feature-slide-img" src="/wp-content/uploads/2026/04/DSC04197.jpg" alt="Princess Cake slice at Victoria Pastry">
         </div>
-      </div>
 
-    </div>
-  </div>
-</section>
+        <!-- RIGHT: Copy -->
+        <div class="vp-reveal">
+          <div class="vp-ornament mb-5">
+            <span class="vp-label" style="color:var(--vp-muted);">Our Signature</span>
+          </div>
 
+          <h2 class="vp-heading" style="font-size:clamp(2.1rem,4.5vw,3.5rem); color:var(--vp-dark); margin:0 0 1.8rem;">
+            The Princess Cake.<br>Since 1914.
+          </h2>
 
-<!-- ████████████████████████████████████████
-     §5  PICKUP
-████████████████████████████████████████ -->
+          <p class="vp-body" style="font-size:.98rem; color:rgba(63,16,22,.76); max-width:48ch; margin:0 0 2.2rem;">
+            San Francisco has been celebrating with this cake for over a century. Vanilla sponge, triple sec, raspberry jam, pastry cream — draped in green marzipan. Every layer made from scratch. Every time.
+          </p>
 
-<style>
-  /*
-   * Uiverse pattern by csemszepp — adapted palette:
-   *   --c1 #f8b195 (salmon) → #C69C3C gold
-   *   --c2 #355c7d (blue)   → #2A180E espresso dark
-   */
-  .vp-pickup-pattern {
-    --s:  100px;
-    --c1: #C69C3C;
-    --c2: #2A180E;
-    --_g: var(--c2) 6% 14%, var(--c1) 16% 24%, var(--c2) 26% 34%,
-          var(--c1) 36% 44%, var(--c2) 46% 54%, var(--c1) 56% 64%, var(--c2) 66% 74%,
-          var(--c1) 76% 84%, var(--c2) 86% 94%;
-    position: absolute;
-    inset: 0;
-    opacity: 0.12;
-    pointer-events: none;
-    background:
-      radial-gradient(
-        100% 100% at 100% 0,
-        var(--c1) 4%,
-        var(--_g),
-        #0008 96%,
-        #0000
-      ),
-      radial-gradient(
-        100% 100% at 0 100%,
-        #0000,
-        #0008 4%,
-        var(--_g),
-        var(--c1) 96%
-      )
-      var(--c1);
-    background-size: var(--s) var(--s);
-  }
-</style>
+          <div class="vp-square-box" style="background:rgba(254,239,220,.52); border:1px solid rgba(63,16,22,.12); padding:1.4rem; margin-bottom:2rem;">
+            <?php
+            $layers = [
+              'Green marzipan dome',
+              'Pastry cream',
+              'Raspberry jam',
+              'Vanilla sponge & triple sec',
+            ];
+            foreach ($layers as $i => $layer) :
+            ?>
+              <div class="vp-layer vp-square-box" style="display:flex; align-items:center; justify-content:space-between; gap:1rem; background:<?php echo $i === 0 ? 'var(--vp-wine)' : 'var(--vp-cream)'; ?>; color:<?php echo $i === 0 ? 'var(--vp-cream)' : 'var(--vp-dark)'; ?>; border:1px solid rgba(63,16,22,.12); padding:.85rem 1rem; margin-bottom:.55rem;">
+                <span class="vp-body" style="font-size:.82rem; line-height:1.4;"><?php echo esc_html($layer); ?></span>
+                <span class="vp-label" style="font-size:.52rem; opacity:.6;">Layer <?php echo $i + 1; ?></span>
+              </div>
+            <?php endforeach; ?>
+          </div>
 
-<section id="order" style="background-color:#3B2314; padding:7rem 0; position:relative; overflow:hidden;">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <?php
+            $prices = [
+              ['label'=>'Slice',      'value'=>'$6.75'],
+              ['label'=>'Sheet Cake', 'value'=>'From $82.99'],
+              ['label'=>'Custom',     'value'=>'Call us'],
+            ];
+            foreach ($prices as $pr) :
+            ?>
+              <div style="border-top:2px solid var(--vp-wine); padding-top:.8rem;">
+                <div class="vp-label" style="color:rgba(63,16,22,.55); font-size:.58rem;"><?php echo esc_html($pr['label']); ?></div>
+                <div class="vp-heading" style="font-size:1.1rem; color:var(--vp-dark);"><?php echo esc_html($pr['value']); ?></div>
+              </div>
+            <?php endforeach; ?>
+          </div>
 
-  <!-- Uiverse stripe pattern -->
-  <div class="vp-pickup-pattern" aria-hidden="true"></div>
-
-  <!-- decorative faded "Pickup" word -->
-  <div style="position:absolute; right:-2%; top:50%; transform:translateY(-50%); font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(7rem,16vw,15rem); color:#F5EFE0; opacity:.03; pointer-events:none; user-select:none; line-height:1;">Pickup</div>
-  <div class="max-w-6xl mx-auto px-6 relative">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-      <div>
-        <div class="vp-ornament mb-5"><span style="font-family:'Lato',sans-serif; font-weight:300; font-size:.65rem; letter-spacing:.26em; text-transform:uppercase; color:#C69C3C;">Ready When You Are</span></div>
-        <h2 style="font-family:'Playfair Display',serif; font-style:italic; font-weight:700; font-size:clamp(2rem,4.5vw,3.2rem); color:#F5EFE0; line-height:1.1; margin-bottom:1.5rem;">Order Pickup</h2>
-        <p style="font-family:'Lato',sans-serif; font-weight:300; font-size:.92rem; line-height:1.85; color:rgba(245,239,224,.6); margin-bottom:2rem; max-width:44ch;">Skip the wait. Order ahead and pick up at 700 Filbert St, North Beach. Open daily, 7am to 8pm.</p>
-        <ul style="list-style:none; padding:0; margin:0 0 2.5rem; display:flex; flex-direction:column; gap:.85rem;">
-          <?php foreach (['Same-day orders welcome','Full menu: cakes, pastries, cookies by the pound','ADA accessible · Outdoor seating'] as $b) : ?>
-          <li style="display:flex; align-items:flex-start; gap:.75rem; font-family:'Lato',sans-serif; font-weight:300; font-size:.85rem; color:rgba(245,239,224,.65); line-height:1.55;">
-            <span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:#C69C3C; flex-shrink:0; margin-top:6px;"></span>
-            <?php echo esc_html($b); ?>
-          </li>
-          <?php endforeach; ?>
-        </ul>
-        <a href="#order-form" class="vp-btn-primary" style="font-family:'Lato',sans-serif; font-weight:400; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; text-decoration:none; display:inline-block; padding:14px 36px; background-color:#C69C3C; color:#3B2314; border-radius:2px;">Start Your Order</a>
-      </div>
-      <div style="border:1px solid rgba(198,156,60,.2); border-radius:3px; padding:2.5rem; background-color:rgba(245,239,224,.04);">
-        <div style="font-family:'Lato',sans-serif; font-weight:300; font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:#C69C3C; margin-bottom:1.5rem;">Location & Hours</div>
-        <div style="font-family:'Playfair Display',serif; font-style:italic; font-size:1.4rem; color:#F5EFE0; margin-bottom:.25rem; line-height:1.2;">700 Filbert St</div>
-        <div style="font-family:'Lato',sans-serif; font-weight:300; font-size:.82rem; color:rgba(245,239,224,.45); margin-bottom:2rem; letter-spacing:.05em;">North Beach, San Francisco, CA 94133</div>
-        <div style="height:1px; background:rgba(198,156,60,.15); margin-bottom:1.5rem;"></div>
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:.6rem;">
-          <span style="font-family:'Lato',sans-serif; font-weight:300; font-size:.78rem; color:rgba(245,239,224,.55);">Open Daily</span>
-          <span style="font-family:'Playfair Display',serif; font-style:italic; font-size:.95rem; color:#F5EFE0;">7:00 AM – 8:00 PM</span>
+          <a href="#order" class="vp-btn vp-btn-dark">Order the Princess Cake</a>
         </div>
-        <div style="height:1px; background:rgba(198,156,60,.1); margin-bottom:1.5rem;"></div>
-        <a href="tel:+14157812015" class="vp-gold-link" style="font-family:'Lato',sans-serif; font-weight:300; font-size:.85rem; letter-spacing:.06em; color:#C69C3C; text-decoration:none; display:flex; align-items:center; gap:.6rem;"><span style="opacity:.7;">📞</span>(415) 781-2015</a>
+
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
+  <!-- PICKUP + CATERING -->
+  <section id="order" style="background:var(--vp-dark); padding:7rem 0; position:relative; overflow:hidden;">
+    <div class="max-w-7xl mx-auto px-6 relative">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-<!-- ████████████████████████████████████████
-     §6  CATERING
-████████████████████████████████████████ -->
-<section id="catering" style="background-color:#F5EFE0; padding:7rem 0; position:relative; overflow:hidden;">
-  <div style="position:absolute; left:-2%; top:50%; transform:translateY(-50%); font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(7rem,16vw,15rem); color:#B85C38; opacity:.04; pointer-events:none; user-select:none; line-height:1;">Catering</div>
-  <div class="max-w-6xl mx-auto px-6 relative">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-      <div style="background-color:#fff; border:1px solid rgba(59,35,20,.07); border-radius:3px; padding:2.5rem; box-shadow:0 6px 32px rgba(59,35,20,.06); position:relative; overflow:hidden;">
-        <div style="position:absolute; top:0; left:0; width:4px; height:100%; background-color:#B85C38;"></div>
-        <div style="font-family:'Lato',sans-serif; font-weight:300; font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:#B85C38; margin-bottom:1.5rem;">We Deliver To</div>
-        <?php foreach (['San Francisco','Marin County','Napa Valley','Peninsula'] as $r) : ?>
-        <div style="display:flex; align-items:center; gap:.75rem; padding:.65rem 0; border-bottom:1px solid rgba(59,35,20,.06);">
-          <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#B85C38; opacity:.5; flex-shrink:0;"></span>
-          <span style="font-family:'Lato',sans-serif; font-weight:300; font-size:.85rem; color:rgba(59,35,20,.7);"><?php echo esc_html($r); ?></span>
-          <span style="margin-left:auto; font-family:'Lato',sans-serif; font-weight:300; font-size:.65rem; letter-spacing:.1em; color:rgba(59,35,20,.3); text-transform:uppercase;">Within 50 mi</span>
+        <div class="vp-reveal vp-square-box" style="background:rgba(254,239,220,.06); border:1px solid var(--vp-light-border); padding:2.4rem;">
+          <div class="vp-label mb-4" style="color:var(--vp-rose);">Ready When You Are</div>
+          <h2 class="vp-heading" style="font-size:clamp(2rem,4vw,3rem); color:var(--vp-cream); margin:0 0 1.3rem;">Order Pickup</h2>
+          <p class="vp-body" style="color:rgba(254,239,220,.74); margin:0 0 1.6rem;">
+            Skip the wait. Order ahead and pick up at 700 Filbert St, North Beach. Open daily, 7am to 8pm.
+          </p>
+          <ul style="list-style:none; padding:0; margin:0 0 2rem; display:flex; flex-direction:column; gap:.8rem;">
+            <?php foreach (['Same-day orders welcome','Full menu: cakes, pastries, cookies by the pound','ADA accessible · Outdoor seating'] as $b) : ?>
+              <li class="vp-body" style="display:flex; gap:.75rem; color:rgba(254,239,220,.7); font-size:.88rem; line-height:1.55;">
+                <span style="width:6px; height:6px; border-radius:0; background:var(--vp-rose); margin-top:8px; flex-shrink:0;"></span>
+                <?php echo esc_html($b); ?>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+          <a href="#visit" class="vp-btn vp-btn-primary">Start Your Order</a>
         </div>
+
+        <div id="catering" class="vp-reveal vp-square-box" style="background:var(--vp-cream); border:1px solid rgba(254,239,220,.16); padding:2.4rem;">
+          <div class="vp-label mb-4" style="color:var(--vp-muted);">Weddings · Events · Corporate</div>
+          <h2 class="vp-heading" style="font-size:clamp(2rem,4vw,3rem); color:var(--vp-dark); margin:0 0 1.3rem;">Catering &<br>Custom Orders</h2>
+          <p class="vp-body" style="color:var(--vp-text-soft); margin:0 0 1.6rem;">
+            From intimate celebrations to large events — we deliver anywhere within 50 miles, including Marin, Peninsula, and Napa.
+          </p>
+          <ul style="list-style:none; padding:0; margin:0 0 2rem; display:flex; flex-direction:column; gap:.8rem;">
+            <?php foreach (['Wedding cakes · Anniversary cakes · Corporate gifting','Delivery up to 50 miles — SF, Marin, Napa, Peninsula','Custom orders: (415) 781-2015'] as $b) : ?>
+              <li class="vp-body" style="display:flex; gap:.75rem; color:var(--vp-text-soft); font-size:.88rem; line-height:1.55;">
+                <span style="width:6px; height:6px; border-radius:0; background:var(--vp-wine); margin-top:8px; flex-shrink:0;"></span>
+                <?php echo esc_html($b); ?>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+          <a href="#contact" class="vp-btn vp-btn-dark">Inquire About Catering</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS / TRUSTINDEX -->
+  <section style="background:var(--vp-cream); padding:6rem 0;">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="vp-reveal text-center mb-10">
+        <div class="vp-ornament mb-4">
+          <span class="vp-label">From Our Guests</span>
+        </div>
+        <h2 class="vp-heading" style="font-size:clamp(2rem,4vw,3.2rem); color:var(--vp-dark); margin:0;">
+          North Beach, Remembered Daily.
+        </h2>
+      </div>
+      <div class="vp-trustindex-wrap vp-reveal">
+        <?php echo do_shortcode('[trustindex no-registration=google]'); ?>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRAND QUOTE -->
+  <section style="background:linear-gradient(135deg, var(--vp-wine) 0%, #7a4650 55%, var(--vp-muted) 100%); padding:7rem 0; position:relative; overflow:hidden;">
+    <div style="position:absolute; inset:0; background:
+  radial-gradient(ellipse 70% 70% at 50% 45%, rgba(254,239,220,.16), transparent 70%),
+  linear-gradient(180deg, rgba(254,239,220,.04), rgba(63,16,22,.18));
+"></div>
+    <div class="max-w-4xl mx-auto px-6 text-center relative vp-reveal">
+      <div style="font-family:'Playfair Display',serif; font-size:6rem; line-height:.6; color:var(--vp-rose); opacity:.38;">&ldquo;</div>
+      <blockquote class="vp-heading" style="font-size:clamp(1.25rem,2.6vw,1.75rem); line-height:1.65; font-weight:400; color:var(--vp-cream); margin:0 0 2.7rem;">
+        Victoria Pastry Company was born in North Beach in 1914 — and has been passed down through generations of Italian families ever since, each one committed to the same authentic recipes, original flavors, and quality ingredients. Over a century later, nothing has changed.
+      </blockquote>
+      <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:.9rem; align-items:center;">
+        <?php
+        $badges = ['SF Business Legendary', 'Nominated Best Cannoli in San Francisco', 'Est. 1914'];
+        foreach ($badges as $i => $badge) :
+          if ($i > 0) : ?>
+            <span style="width:4px; height:4px; border-radius:0; background:var(--vp-rose); opacity:.6;"></span>
+          <?php endif; ?>
+          <span class="vp-label" style="color:rgba(254,239,220,.72); font-size:.58rem;"><?php echo esc_html($badge); ?></span>
         <?php endforeach; ?>
-        <div style="margin-top:1.5rem; font-family:'Playfair Display',serif; font-style:italic; font-size:.82rem; color:rgba(59,35,20,.4);">Custom orders: <a href="tel:+14157812015" style="color:#B85C38;text-decoration:none;">(415) 781-2015</a></div>
-      </div>
-      <div>
-        <div class="vp-ornament mb-5"><span style="font-family:'Lato',sans-serif; font-weight:300; font-size:.65rem; letter-spacing:.26em; text-transform:uppercase; color:#B85C38;">Weddings · Events · Corporate</span></div>
-        <h2 style="font-family:'Playfair Display',serif; font-style:italic; font-weight:700; font-size:clamp(2rem,4.5vw,3.2rem); color:#3B2314; line-height:1.1; margin-bottom:1.5rem;">Catering &amp;<br>Custom Orders</h2>
-        <p style="font-family:'Lato',sans-serif; font-weight:300; font-size:.92rem; line-height:1.85; color:rgba(59,35,20,.65); margin-bottom:2rem; max-width:44ch;">From intimate celebrations to large events — we deliver anywhere within 50 miles, including Marin, Peninsula, and Napa.</p>
-        <ul style="list-style:none; padding:0; margin:0 0 2.5rem; display:flex; flex-direction:column; gap:.85rem;">
-          <?php foreach (['Wedding cakes · Anniversary cakes · Corporate gifting','Delivery up to 50 miles — SF, Marin, Napa, Peninsula','Custom orders: (415) 781-2015'] as $b) : ?>
-          <li style="display:flex; align-items:flex-start; gap:.75rem; font-family:'Lato',sans-serif; font-weight:300; font-size:.85rem; color:rgba(59,35,20,.65); line-height:1.55;">
-            <span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:#B85C38; flex-shrink:0; margin-top:6px;"></span>
-            <?php echo esc_html($b); ?>
-          </li>
-          <?php endforeach; ?>
-        </ul>
-        <a href="#contact" class="vp-btn-primary" style="font-family:'Lato',sans-serif; font-weight:400; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; text-decoration:none; display:inline-block; padding:14px 36px; background-color:#B85C38; color:#F5EFE0; border-radius:2px;">Inquire About Catering</a>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
+  <!-- VISIT -->
+  <section id="visit" style="background:var(--vp-dark); position:relative; overflow:hidden;">
 
-<!-- ████████████████████████████████████████
-     §7  BRAND QUOTE
-████████████████████████████████████████ -->
-
-<style>
-  /*
-   * Uiverse pattern — adapted to Victoria Pastry palette.
-   *
-   * Original:  base #e5e5f7  ·  stripes rgba(#ffb5b5, .54)
-   * Adapted:   base #F5EFE0 (cream)  ·  stripes gold + terracotta
-   *
-   * The pattern sits on a pseudo-element at low opacity so the
-   * espresso background and text remain fully legible.
-   */
-  .vp-quote-bg {
-    position: relative;
-    background-color: #2A180E;
-    overflow: hidden;
-  }
-
-  /* Pattern layer */
-  .vp-quote-bg::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    opacity: 0.13;           /* subtle — just enough texture */
-    background-color: #F5EFE0;
-    background-image:
-      repeating-radial-gradient(
-        circle at 0 0,
-        transparent 0,
-        #F5EFE0 28px
-      ),
-      repeating-linear-gradient(
-        135deg,
-        rgba(198,156,60, .7),   /* gold */
-        rgba(184,92,56,  .55)   /* terracotta */
-      );
-    pointer-events: none;
-  }
-
-  /* Soft vignette on top of the pattern to focus the center */
-  .vp-quote-bg::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-      ellipse 75% 70% at 50% 50%,
-      transparent 30%,
-      rgba(42,24,14,.65) 100%
-    );
-    pointer-events: none;
-  }
-</style>
-
-<section class="vp-quote-bg" style="padding:7rem 0;">
-
-  <!-- gold accent line top -->
-  <div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,#C69C3C,transparent); opacity:.5; z-index:2;"></div>
-
-  <div class="max-w-4xl mx-auto px-6 text-center" style="position:relative; z-index:2;">
-
-    <div class="vp-quote-marks" aria-hidden="true">&ldquo;</div>
-
-    <blockquote style="
-      font-family:'Playfair Display',serif;
-      font-style:italic;
-      font-weight:400;
-      font-size:clamp(1.1rem,2.5vw,1.55rem);
-      line-height:1.75;
-      color:#F5EFE0;
-      margin:0 0 3rem;
-    ">Victoria Pastry Company was born in North Beach in 1914 — and has been passed down through generations of Italian families ever since, each one committed to the same authentic recipes, original flavors, and quality ingredients. Over a century later, nothing has changed.</blockquote>
-
-    <!-- attribution badges -->
-    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:1rem;">
-      <?php
-      $badges = ['SF Business Legendary','Nominated Best Cannoli in San Francisco','Est. 1914'];
-      foreach ($badges as $i => $badge) :
-        if ($i > 0) : ?><span style="display:inline-block; width:3px; height:3px; border-radius:50%; background:#C69C3C; opacity:.5;"></span><?php endif; ?>
-        <span style="font-family:'Lato',sans-serif; font-weight:300; font-size:.65rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(198,156,60,.65);"><?php echo esc_html($badge); ?></span>
-      <?php endforeach; ?>
+    <div style="position:absolute; inset:0; z-index:0;">
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        style="width:100%; height:100%; object-fit:cover; object-position:center;">
+        <source src="/wp-content/uploads/2026/04/C0043.mp4" type="video/mp4">
+      </video>
+      <div style="position:absolute; inset:0; background:
+  linear-gradient(90deg, rgba(63,16,22,.84) 0%, rgba(63,16,22,.62) 55%, rgba(63,16,22,.26) 100%),
+  linear-gradient(180deg, rgba(101,51,60,.18), rgba(63,16,22,.55));
+"></div>
     </div>
 
-  </div>
-</section>
+    <div class="max-w-7xl mx-auto px-6 relative vp-reveal" style="z-index:2; padding-top:6.5rem; padding-bottom:6.5rem;">
 
+      <div class="vp-label mb-5" style="color:var(--vp-rose);">Visit Us</div>
+
+      <h2 class="vp-heading" style="font-size:clamp(2.2rem,5vw,3.8rem); color:var(--vp-cream); margin:0 0 1.4rem; max-width:18ch;">
+        700 Filbert St,<br>North Beach.
+      </h2>
+
+      <p class="vp-body" style="font-size:.95rem; color:rgba(254,239,220,.68); margin:0 0 2.6rem; max-width:36ch;">
+        Open Daily 7:00 AM – 8:00 PM &nbsp;·&nbsp; (415) 781-2015
+      </p>
+
+      <div class="flex flex-wrap gap-4">
+        <a href="tel:+14157812015" class="vp-btn vp-btn-primary">Call Us</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=700%20Filbert%20St%20San%20Francisco%20CA%2094133"
+           target="_blank" rel="noopener" class="vp-btn vp-btn-outline">Get Directions</a>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const reveals = document.querySelectorAll(".vp-reveal");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14 });
+
+    reveals.forEach((el, index) => {
+      el.style.transitionDelay = `${Math.min(index * 55, 220)}ms`;
+      observer.observe(el);
+    });
+  });
+</script>
 
 <?php get_footer(); ?>

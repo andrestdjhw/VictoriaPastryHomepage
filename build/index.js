@@ -55,22 +55,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
 
 
-const COLORS = {
-  espresso: "#3B2314",
-  espressoDark: "#2A180E",
-  cream: "#F5EFE0",
-  creamMuted: "rgba(245,239,224,0.55)",
-  gold: "#C69C3C",
-  goldMuted: "rgba(198,156,60,0.25)",
-  terracotta: "#B85C38",
-  green: "#6B8F3A"
+const C = {
+  dark: "#3f1016",
+  deep: "#300b10",
+  wine: "#4b1219",
+  muted: "#9d7961",
+  cream: "#feefdc",
+  rose: "#d6bcad"
 };
-const NAV_LINKS = [{
+const FOOTER_LINKS = [{
   label: "Menu",
   href: "#menu"
 }, {
   label: "Princess Cake",
-  href: "#princess-cake"
+  href: "#princess-cake",
+  featured: true
 }, {
   label: "Catering",
   href: "#catering"
@@ -79,115 +78,59 @@ const NAV_LINKS = [{
   href: "#our-story"
 }, {
   label: "Order Pickup",
-  href: "#order",
-  cta: true
+  href: "#order"
 }, {
-  label: "Contact",
-  href: "#contact"
+  label: "Visit Us",
+  href: "#visit"
 }];
-
-/* ── FooterLink ─────────────────────────────────────────── */
+function getAdminBarHeight() {
+  const bar = document.getElementById("wpadminbar");
+  return bar ? bar.offsetHeight : 0;
+}
+function smoothTo(href, offset = 0) {
+  if (!href.startsWith("#")) {
+    window.location.href = href;
+    return;
+  }
+  const el = document.querySelector(href);
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({
+    top,
+    behavior: "smooth"
+  });
+}
 function FooterLink({
   label,
   href,
-  cta
+  featured
 }) {
   const [hovered, setHovered] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  if (cta) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
-      href: href,
-      onMouseEnter: () => setHovered(true),
-      onMouseLeave: () => setHovered(false),
-      style: {
-        fontFamily: "'Lato', sans-serif",
-        fontWeight: 400,
-        fontSize: "0.7rem",
-        letterSpacing: "0.16em",
-        textTransform: "uppercase",
-        textDecoration: "none",
-        padding: "5px 14px",
-        border: `1px solid ${COLORS.gold}`,
-        borderRadius: "2px",
-        backgroundColor: hovered ? COLORS.gold : "transparent",
-        color: hovered ? COLORS.espresso : COLORS.gold,
-        transition: "background-color 0.22s ease, color 0.22s ease",
-        lineHeight: 1,
-        whiteSpace: "nowrap"
-      },
-      children: label
-    });
-  }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
     href: href,
+    onClick: e => {
+      e.preventDefault();
+      smoothTo(href, getAdminBarHeight() + 74);
+    },
     onMouseEnter: () => setHovered(true),
     onMouseLeave: () => setHovered(false),
     style: {
-      fontFamily: "'Lato', sans-serif",
-      fontWeight: 300,
-      fontSize: "0.7rem",
-      letterSpacing: "0.12em",
-      textTransform: "uppercase",
-      color: hovered ? COLORS.gold : COLORS.creamMuted,
+      fontFamily: featured ? "'Playfair Display', serif" : "'Lato', sans-serif",
+      fontStyle: featured ? "italic" : "normal",
+      fontWeight: 700,
+      fontSize: featured ? "0.9rem" : "0.64rem",
+      letterSpacing: featured ? "0.01em" : "0.17em",
+      textTransform: featured ? "none" : "uppercase",
+      color: hovered ? C.cream : featured ? "rgba(254,239,220,.78)" : "rgba(254,239,220,.48)",
       textDecoration: "none",
-      paddingBottom: "2px",
-      borderBottom: hovered ? `1px solid ${COLORS.gold}` : "1px solid transparent",
-      transition: "color 0.22s ease, border-color 0.22s ease",
+      transition: "color .22s ease, transform .22s ease",
+      transform: hovered ? "translateX(3px)" : "none",
+      display: "inline-block",
       whiteSpace: "nowrap"
     },
     children: label
   });
 }
-
-/* ── Badge ──────────────────────────────────────────────── */
-function Badge({
-  children
-}) {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
-    style: {
-      display: "inline-flex",
-      alignItems: "center",
-      gap: "6px",
-      fontFamily: "'Lato', sans-serif",
-      fontWeight: 300,
-      fontSize: "0.65rem",
-      letterSpacing: "0.14em",
-      textTransform: "uppercase",
-      color: COLORS.gold,
-      border: `1px solid ${COLORS.goldMuted}`,
-      borderRadius: "2px",
-      padding: "5px 11px"
-    },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-      style: {
-        fontSize: "0.6rem",
-        opacity: 0.85
-      },
-      children: "\u2726"
-    }), children]
-  });
-}
-
-/* ── Divider dot ────────────────────────────────────────── */
-const Dot = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-  style: {
-    display: "inline-block",
-    width: "3px",
-    height: "3px",
-    borderRadius: "50%",
-    backgroundColor: COLORS.gold,
-    opacity: 0.4,
-    flexShrink: 0,
-    alignSelf: "center"
-  }
-});
-
-/* ── FrostingWave (footer edition — scallops face UP) ───── */
-/*
- * Identical path to the navbar wave but the SVG is flipped
- * vertically with scaleY(-1).  Positioned at the very top of
- * the footer with translateY(-100%) so it "drips" up into
- * whatever section sits above.
- */
 function FrostingWave() {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
     "aria-hidden": "true",
@@ -199,345 +142,391 @@ function FrostingWave() {
       transform: "translateY(-100%)",
       lineHeight: 0,
       pointerEvents: "none",
-      zIndex: 10
+      zIndex: 5
     },
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
       xmlns: "http://www.w3.org/2000/svg",
-      viewBox: "0 0 1440 54",
+      viewBox: "0 0 1440 46",
       preserveAspectRatio: "none",
       style: {
         display: "block",
         width: "100%",
-        height: "auto",
-        /* flip upside-down so scallops point upward */
+        height: "46px",
         transform: "scaleY(-1)"
       },
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
-        d: "M0,0 H1440 V9 " + "Q1400,50 1360,9 " + "Q1320,44 1280,9 " + "Q1240,52 1200,9 " + "Q1160,46 1120,9 " + "Q1080,52 1040,9 " + "Q1000,44 960,9 " + "Q920,50 880,9 " + "Q840,46 800,9 " + "Q760,52 720,9 " + "Q680,44 640,9 " + "Q600,50 560,9 " + "Q520,46 480,9 " + "Q440,52 400,9 " + "Q360,44 320,9 " + "Q280,50 240,9 " + "Q200,46 160,9 " + "Q120,52 80,9 " + "Q40,44 0,9 " + "L0,0 Z",
-        fill: COLORS.espressoDark
+        d: "M0,0 H1440 V10 " + "Q1410,42 1380,10 Q1350,40 1320,10 Q1290,42 1260,10 " + "Q1230,40 1200,10 Q1170,42 1140,10 Q1110,40 1080,10 " + "Q1050,42 1020,10 Q990,40 960,10 Q930,42 900,10 " + "Q870,40 840,10 Q810,42 780,10 Q750,40 720,10 " + "Q690,42 660,10 Q630,40 600,10 Q570,42 540,10 " + "Q510,40 480,10 Q450,42 420,10 Q390,40 360,10 " + "Q330,42 300,10 Q270,40 240,10 Q210,42 180,10 " + "Q150,40 120,10 Q90,42 60,10 Q30,40 0,10 " + "L0,0 Z",
+        fill: C.deep
       })
     })
   });
 }
-
-/* ── Footer (main) ──────────────────────────────────────── */
+function Badge({
+  children
+}) {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
+    style: {
+      display: "inline-flex",
+      alignItems: "center",
+      gap: "7px",
+      border: "1px solid rgba(214,188,173,.18)",
+      color: "rgba(214,188,173,.70)",
+      padding: "7px 11px",
+      fontFamily: "'Lato', sans-serif",
+      fontWeight: 700,
+      fontSize: "0.54rem",
+      letterSpacing: "0.18em",
+      textTransform: "uppercase",
+      background: "rgba(254,239,220,.025)"
+    },
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+      style: {
+        opacity: 0.55
+      },
+      children: "\u2726"
+    }), children]
+  });
+}
+function MiniTable({
+  left = false
+}) {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+    "aria-hidden": "true",
+    style: {
+      position: "absolute",
+      bottom: "10px",
+      [left ? "left" : "right"]: left ? "5%" : "7%",
+      width: "135px",
+      height: "80px",
+      opacity: 0.055,
+      pointerEvents: "none"
+    },
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      style: {
+        position: "absolute",
+        left: "50%",
+        bottom: "44px",
+        width: "90px",
+        height: "8px",
+        transform: "translateX(-50%)",
+        background: C.rose,
+        borderRadius: "999px"
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      style: {
+        position: "absolute",
+        left: "50%",
+        bottom: "0",
+        width: "2px",
+        height: "46px",
+        background: C.rose
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      style: {
+        position: "absolute",
+        left: "20px",
+        bottom: "8px",
+        width: "32px",
+        height: "32px",
+        border: `2px solid ${C.rose}`,
+        borderTop: "none",
+        borderRadius: "0 0 18px 18px",
+        transform: "rotate(-7deg)"
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      style: {
+        position: "absolute",
+        right: "20px",
+        bottom: "8px",
+        width: "32px",
+        height: "32px",
+        border: `2px solid ${C.rose}`,
+        borderTop: "none",
+        borderRadius: "0 0 18px 18px",
+        transform: "rotate(7deg)"
+      }
+    })]
+  });
+}
 function Footer() {
   const year = new Date().getFullYear();
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("footer", {
     style: {
-      backgroundColor: COLORS.espressoDark,
-      width: "100%",
       position: "relative",
-      /*
-       * overflow must be VISIBLE so the wave can protrude
-       * above the footer's top edge into the section above.
-       */
-      overflow: "visible"
+      overflow: "visible",
+      background: C.deep,
+      color: C.cream
     },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FrostingWave, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
-      width: "0",
-      height: "0",
-      style: {
-        position: "absolute"
-      },
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FrostingWave, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
       "aria-hidden": "true",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("defs", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("filter", {
-          id: "vp-void-texture",
-          x: "0%",
-          y: "0%",
-          width: "100%",
-          height: "100%",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("feTurbulence", {
-            type: "fractalNoise",
-            baseFrequency: "0.65",
-            numOctaves: "3",
-            stitchTiles: "stitch",
-            result: "noise"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("feColorMatrix", {
-            type: "saturate",
-            values: "0",
-            in: "noise",
-            result: "grayNoise"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("feBlend", {
-            in: "SourceGraphic",
-            in2: "grayNoise",
-            mode: "multiply",
-            result: "blended"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("feComponentTransfer", {
-            in: "blended",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("feFuncA", {
-              type: "linear",
-              slope: "1"
-            })
-          })]
-        })
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      "aria-hidden": true,
       style: {
         position: "absolute",
         inset: 0,
-        opacity: 0.06,
-        backgroundImage: `
-            radial-gradient(circle, ${COLORS.gold} 2px, transparent 2px),
-            radial-gradient(circle, ${COLORS.cream} 10px, transparent 32px),
-            linear-gradient(
-              -45deg,
-              ${COLORS.cream} 0%,
-              transparent 49%,
-              transparent 50%,
-              transparent 51%,
-              ${COLORS.cream} 100%
-            ),
-            linear-gradient(
-              45deg,
-              ${COLORS.cream} 0%,
-              transparent 49%,
-              ${COLORS.gold} 50%,
-              transparent 51%,
-              ${COLORS.cream} 100%
-            ),
-            linear-gradient(-45deg, transparent 49%, ${COLORS.gold} 50%, transparent 51%)
-          `,
-        backgroundSize: "8rem 8rem",
-        backgroundRepeat: "repeat",
+        background: `linear-gradient(180deg, ${C.deep} 0%, #26080d 100%),
+             radial-gradient(circle at 20% 10%, rgba(214,188,173,.05), transparent 28%),
+             radial-gradient(circle at 82% 32%, rgba(157,121,97,.06), transparent 34%)`,
         pointerEvents: "none"
       }
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      "aria-hidden": true,
+      "aria-hidden": "true",
       style: {
         position: "absolute",
         inset: 0,
-        filter: "url(#vp-void-texture)",
-        background: `linear-gradient(
-            to bottom,
-            rgba(198, 156, 60, 0.18) 0%,
-            rgba(184, 92,  56, 0.14) 100%
-          )`,
-        backgroundSize: "cover",
-        pointerEvents: "none",
-        mixBlendMode: "soft-light"
+        opacity: 0.055,
+        backgroundImage: "linear-gradient(rgba(254,239,220,.10) 1px, transparent 1px), linear-gradient(90deg, rgba(254,239,220,.10) 1px, transparent 1px)",
+        backgroundSize: "88px 88px",
+        maskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 78%, transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 78%, transparent 100%)",
+        pointerEvents: "none"
       }
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(MiniTable, {
+      left: true
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(MiniTable, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
       style: {
-        height: "1px",
-        background: `linear-gradient(90deg, transparent 0%, ${COLORS.gold} 50%, transparent 100%)`,
-        opacity: 0.35
-      }
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      style: {
-        maxWidth: "1200px",
+        position: "relative",
+        maxWidth: "1160px",
         margin: "0 auto",
-        padding: "calc(54px + 2rem) 1.5rem 2.5rem",
-        position: "relative"
+        padding: "5.4rem 2rem 1.75rem"
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
         style: {
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          gap: "2.5rem",
-          marginBottom: "2.75rem"
-        },
+          height: "1px",
+          background: "linear-gradient(90deg, transparent, rgba(214,188,173,.22), transparent)",
+          marginBottom: "3rem"
+        }
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+        className: "vp-footer-grid",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("a", {
             href: "/",
             style: {
-              textDecoration: "none"
+              textDecoration: "none",
+              display: "inline-block"
             },
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
               style: {
                 fontFamily: "'Playfair Display', serif",
                 fontStyle: "italic",
                 fontWeight: 700,
-                fontSize: "1.75rem",
-                color: COLORS.cream,
-                letterSpacing: "-0.01em",
+                fontSize: "2rem",
+                letterSpacing: "-0.035em",
+                color: "rgba(254,239,224,.88)",
                 lineHeight: 1
               },
-              children: "Victoria"
+              children: "Victoria Pastry Co."
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
               style: {
                 fontFamily: "'Lato', sans-serif",
-                fontWeight: 300,
-                fontSize: "0.55rem",
-                letterSpacing: "0.3em",
+                fontWeight: 700,
+                fontSize: "0.5rem",
+                letterSpacing: "0.31em",
                 textTransform: "uppercase",
-                color: COLORS.terracotta,
-                marginTop: "5px"
+                color: "rgba(214,188,173,.62)",
+                marginTop: "8px"
               },
-              children: "Pastry \xA0\xB7\xA0 Homemade"
+              children: "North Beach \xA0\xB7\xA0 Est. 1914"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
             style: {
               fontFamily: "'Playfair Display', serif",
               fontStyle: "italic",
-              fontSize: "0.8rem",
-              color: COLORS.creamMuted,
-              marginTop: "1rem",
-              maxWidth: "200px",
-              lineHeight: 1.6
+              fontSize: "1.28rem",
+              lineHeight: 1.48,
+              color: "rgba(254,239,220,.68)",
+              maxWidth: "430px",
+              margin: "1.6rem 0 0"
             },
-            children: "Baked with tradition since the day North Beach fell in love."
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("nav", {
-          style: {
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            gap: "0.9rem 1rem",
-            maxWidth: "540px",
-            paddingTop: "4px"
-          },
-          children: NAV_LINKS.map((link, i) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-            children: [i > 0 && !link.cta && !NAV_LINKS[i - 1]?.cta && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Dot, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FooterLink, {
-              ...link
-            })]
-          }, link.label))
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-        style: {
-          height: "1px",
-          backgroundColor: "rgba(245,239,224,0.08)",
-          marginBottom: "2rem"
-        }
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-        style: {
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          gap: "2rem",
-          marginBottom: "2.5rem"
-        },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-          style: {
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.6rem"
-          },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-            style: {
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "10px"
-            },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-              style: {
-                color: COLORS.gold,
-                fontSize: "0.7rem",
-                marginTop: "2px",
-                flexShrink: 0
-              },
-              children: "\uD83D\uDCCD"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
-              style: {
-                fontFamily: "'Lato', sans-serif",
-                fontWeight: 300,
-                fontSize: "0.78rem",
-                color: COLORS.creamMuted,
-                letterSpacing: "0.02em",
-                lineHeight: 1.5
-              },
-              children: ["700 Filbert St, North Beach", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("br", {}), "San Francisco, CA 94133"]
-            })]
+            children: "Over a century of Italian pastry, made the same way \u2014 with the same recipes, same care, and the same North Beach soul."
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
             style: {
               display: "flex",
-              alignItems: "center",
-              gap: "10px"
+              flexWrap: "wrap",
+              gap: ".65rem",
+              marginTop: "1.6rem"
             },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-              style: {
-                color: COLORS.gold,
-                fontSize: "0.7rem",
-                flexShrink: 0
-              },
-              children: "\uD83D\uDD56"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-              style: {
-                fontFamily: "'Lato', sans-serif",
-                fontWeight: 300,
-                fontSize: "0.78rem",
-                color: COLORS.creamMuted,
-                letterSpacing: "0.02em"
-              },
-              children: "Open Daily \xA07:00 AM \u2013 8:00 PM"
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-            style: {
-              display: "flex",
-              alignItems: "center",
-              gap: "10px"
-            },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-              style: {
-                color: COLORS.gold,
-                fontSize: "0.7rem",
-                flexShrink: 0
-              },
-              children: "\uD83D\uDCDE"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
-              href: "tel:+14157812015",
-              style: {
-                fontFamily: "'Lato', sans-serif",
-                fontWeight: 300,
-                fontSize: "0.78rem",
-                color: COLORS.creamMuted,
-                textDecoration: "none",
-                letterSpacing: "0.04em",
-                transition: "color 0.2s"
-              },
-              onMouseEnter: e => e.target.style.color = COLORS.gold,
-              onMouseLeave: e => e.target.style.color = COLORS.creamMuted,
-              children: "(415) 781-2015"
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Badge, {
+              children: "SF Business Legendary"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Badge, {
+              children: "Best Cannoli in San Francisco"
             })]
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
           style: {
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-end",
-            gap: "0.6rem"
+            borderLeft: "1px solid rgba(254,239,220,.075)",
+            paddingLeft: "2rem"
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Badge, {
-            children: "SF Business Legendary"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Badge, {
-            children: "Best Cannoli in San Francisco"
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+            style: {
+              fontFamily: "'Lato', sans-serif",
+              fontWeight: 700,
+              fontSize: "0.58rem",
+              letterSpacing: "0.24em",
+              textTransform: "uppercase",
+              color: "rgba(157,121,97,.75)",
+              marginBottom: "1.15rem"
+            },
+            children: "Explore"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("nav", {
+            style: {
+              display: "flex",
+              flexDirection: "column",
+              gap: ".85rem"
+            },
+            children: FOOTER_LINKS.map(link => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FooterLink, {
+              ...link
+            }, link.label))
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+          style: {
+            background: "rgba(254,239,220,.035)",
+            border: "1px solid rgba(214,188,173,.14)",
+            boxShadow: "0 24px 70px rgba(0,0,0,.16)",
+            padding: "1.45rem",
+            position: "relative",
+            overflow: "hidden"
+          },
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+            "aria-hidden": "true",
+            style: {
+              position: "absolute",
+              right: "-36px",
+              top: "-36px",
+              width: "104px",
+              height: "104px",
+              borderRadius: "999px",
+              border: "1px solid rgba(214,188,173,.12)"
+            }
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+            style: {
+              fontFamily: "'Lato', sans-serif",
+              fontWeight: 700,
+              fontSize: "0.58rem",
+              letterSpacing: "0.24em",
+              textTransform: "uppercase",
+              color: "rgba(214,188,173,.65)",
+              marginBottom: ".95rem"
+            },
+            children: "Visit Us"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+            style: {
+              fontFamily: "'Playfair Display', serif",
+              fontStyle: "italic",
+              fontWeight: 700,
+              fontSize: "1.55rem",
+              color: "rgba(254,239,220,.88)",
+              lineHeight: 1.1,
+              marginBottom: ".9rem"
+            },
+            children: "700 Filbert St."
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("p", {
+            style: {
+              fontFamily: "'Lato', sans-serif",
+              fontWeight: 300,
+              fontSize: ".8rem",
+              lineHeight: 1.7,
+              color: "rgba(254,239,220,.54)",
+              margin: 0
+            },
+            children: ["North Beach, San Francisco, CA 94133", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("br", {}), "Open daily 7:00 AM \u2013 8:00 PM"]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+            style: {
+              display: "flex",
+              flexWrap: "wrap",
+              gap: ".7rem",
+              marginTop: "1.35rem"
+            },
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
+              href: "tel:+14157812015",
+              style: {
+                fontFamily: "'Lato', sans-serif",
+                fontWeight: 700,
+                fontSize: ".64rem",
+                letterSpacing: ".16em",
+                textTransform: "uppercase",
+                textDecoration: "none",
+                color: C.dark,
+                background: "rgba(254,239,220,.88)",
+                padding: "11px 15px",
+                border: "1px solid rgba(254,239,220,.88)"
+              },
+              children: "Call Us"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
+              href: "https://www.google.com/maps/search/?api=1&query=700%20Filbert%20St%20San%20Francisco%20CA%2094133",
+              target: "_blank",
+              rel: "noopener noreferrer",
+              style: {
+                fontFamily: "'Lato', sans-serif",
+                fontWeight: 700,
+                fontSize: ".64rem",
+                letterSpacing: ".16em",
+                textTransform: "uppercase",
+                textDecoration: "none",
+                color: "rgba(254,239,220,.82)",
+                background: "transparent",
+                padding: "11px 15px",
+                border: "1px solid rgba(214,188,173,.38)"
+              },
+              children: "Directions"
+            })]
           })]
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
         style: {
+          marginTop: "3.6rem",
+          paddingTop: "1.25rem",
+          borderTop: "1px solid rgba(254,239,220,.07)",
           display: "flex",
           flexWrap: "wrap",
           justifyContent: "space-between",
           alignItems: "center",
-          gap: "0.75rem",
-          paddingTop: "1.25rem",
-          borderTop: "1px solid rgba(245,239,224,0.06)"
+          gap: "1rem"
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
           style: {
             fontFamily: "'Lato', sans-serif",
             fontWeight: 300,
-            fontSize: "0.65rem",
-            letterSpacing: "0.1em",
-            color: "rgba(245,239,224,0.3)"
+            fontSize: "0.62rem",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: "rgba(254,239,220,.30)"
           },
-          children: ["\xA9 ", year, " Victoria Pastry Co. \xA0\xB7\xA0 All rights reserved."]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+          children: ["\xA9 ", year, " Victoria Pastry Co. \xB7 All rights reserved."]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
           style: {
             fontFamily: "'Playfair Display', serif",
             fontStyle: "italic",
-            fontSize: "0.65rem",
-            color: "rgba(198,156,60,0.4)",
-            letterSpacing: "0.05em"
+            fontSize: ".82rem",
+            color: "rgba(214,188,173,.42)"
           },
-          children: "North Beach, San Francisco"
+          children: "Authentic Since 1914."
         })]
       })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("style", {
+      children: `
+        .vp-footer-grid {
+          display: grid;
+          grid-template-columns: minmax(260px, 1.1fr) minmax(190px, .65fr) minmax(260px, .85fr);
+          gap: 3rem;
+          align-items: start;
+        }
+
+        @media (max-width: 920px) {
+          .vp-footer-grid {
+            grid-template-columns: 1fr !important;
+          }
+
+          .vp-footer-grid > div {
+            border-left: none !important;
+            padding-left: 0 !important;
+          }
+        }
+
+        @media (max-width: 640px) {
+          footer {
+            text-align: left;
+          }
+        }
+      `
     })]
   });
 }
@@ -560,148 +549,72 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
 
 
-const COLORS = {
-  espresso: "#3B2314",
-  cream: "#F5EFE0",
-  gold: "#C69C3C",
-  terracotta: "#B85C38",
-  green: "#6B8F3A"
+/* ─── BRAND TOKENS ──────────────────────────────────────────── */
+
+const C = {
+  dark: "#3f1016",
+  wine: "#65333c",
+  muted: "#9d7961",
+  cream: "#feefdc",
+  rose: "#d6bcad"
 };
 const NAV_LINKS = [{
   label: "Menu",
-  href: "#menu"
+  href: "#menu",
+  featured: false
 }, {
   label: "Princess Cake",
-  href: "#princess-cake"
+  href: "#princess-cake",
+  featured: true
 }, {
   label: "Catering",
-  href: "#catering"
+  href: "#catering",
+  featured: false
 }, {
   label: "Our Story",
-  href: "#our-story"
+  href: "#visit",
+  featured: false
 }];
 
-/* ── tiny hook: detect scroll position ─────────────────── */
-function useScrolled(threshold = 10) {
+/* ─── HOOKS ──────────────────────────────────────────────────── */
+function useScrolled(threshold = 12) {
   const [scrolled, setScrolled] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const onScroll = () => setScrolled(window.scrollY > threshold);
-    window.addEventListener("scroll", onScroll, {
+    const fn = () => setScrolled(window.scrollY > threshold);
+    window.addEventListener("scroll", fn, {
       passive: true
     });
-    return () => window.removeEventListener("scroll", onScroll);
+    fn();
+    return () => window.removeEventListener("scroll", fn);
   }, [threshold]);
   return scrolled;
 }
-
-/* ── NavLink ────────────────────────────────────────────── */
-function NavLink({
-  label,
-  href
-}) {
-  const [hovered, setHovered] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
-    href: href,
-    onMouseEnter: () => setHovered(true),
-    onMouseLeave: () => setHovered(false),
-    style: {
-      fontFamily: "'Lato', sans-serif",
-      fontWeight: 300,
-      fontSize: "0.8125rem",
-      letterSpacing: "0.12em",
-      textTransform: "uppercase",
-      color: hovered ? COLORS.gold : "rgba(245,239,224,0.85)",
-      textDecoration: "none",
-      paddingBottom: "3px",
-      borderBottom: hovered ? `1px solid ${COLORS.gold}` : "1px solid transparent",
-      transition: "color 0.25s ease, border-color 0.25s ease",
-      whiteSpace: "nowrap"
-    },
-    children: label
-  });
+function useAdminBarHeight() {
+  const [h, setH] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const bar = document.getElementById("wpadminbar");
+    if (bar) {
+      setH(bar.offsetHeight); // ya detecta 32px desktop / 46px mobile
+    } else {
+      setH(0);
+    }
+  }, []);
+  return h;
+}
+function useMobile(breakpoint = 860) {
+  const [mobile, setMobile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const fn = () => setMobile(window.innerWidth < breakpoint);
+    fn();
+    window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
+  }, [breakpoint]);
+  return mobile;
 }
 
-/* ── CTAButton ──────────────────────────────────────────── */
-function CTAButton({
-  label,
-  href
-}) {
-  const [hovered, setHovered] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
-    href: href,
-    onMouseEnter: () => setHovered(true),
-    onMouseLeave: () => setHovered(false),
-    style: {
-      fontFamily: "'Lato', sans-serif",
-      fontWeight: 400,
-      fontSize: "0.75rem",
-      letterSpacing: "0.14em",
-      textTransform: "uppercase",
-      textDecoration: "none",
-      padding: "8px 20px",
-      border: `1.5px solid ${COLORS.gold}`,
-      borderRadius: "2px",
-      backgroundColor: hovered ? COLORS.gold : "transparent",
-      color: hovered ? COLORS.espresso : COLORS.gold,
-      transition: "background-color 0.25s ease, color 0.25s ease",
-      whiteSpace: "nowrap",
-      lineHeight: 1
-    },
-    children: label
-  });
-}
-
-/* ── MobileMenu ─────────────────────────────────────────── */
-function MobileMenu({
-  open
-}) {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    style: {
-      position: "absolute",
-      top: "100%",
-      left: 0,
-      right: 0,
-      backgroundColor: COLORS.espresso,
-      borderTop: `1px solid rgba(198,156,60,0.2)`,
-      boxShadow: "0 8px 24px rgba(0,0,0,0.25)",
-      padding: open ? "1.5rem 1.5rem 2rem" : "0 1.5rem",
-      maxHeight: open ? "400px" : "0px",
-      overflow: "hidden",
-      transition: "max-height 0.35s cubic-bezier(0.4,0,0.2,1), padding 0.35s ease",
-      display: "flex",
-      flexDirection: "column",
-      gap: "1.25rem",
-      zIndex: 99
-    },
-    children: [NAV_LINKS.map(link => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
-      href: link.href,
-      style: {
-        fontFamily: "'Lato', sans-serif",
-        fontWeight: 300,
-        fontSize: "0.875rem",
-        letterSpacing: "0.1em",
-        textTransform: "uppercase",
-        color: "rgba(245,239,224,0.8)",
-        textDecoration: "none"
-      },
-      children: link.label
-    }, link.label)), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(CTAButton, {
-      label: "Order Pickup",
-      href: "#order"
-    })]
-  });
-}
-
-/* ── FrostingWave ───────────────────────────────────────── */
-/*
- * SVG scallop shape that "drips" below the navbar.
- * 18 bumps across 1440 px, each 80 px wide, dipping ~38 px.
- * A couple of bumps are intentionally taller/shorter for an
- * organic hand-piped frosting feel.
- */
+/* ─── FROSTING WAVE ──────────────────────────────────────────── */
 function FrostingWave({
-  fill,
-  scrolled
+  color
 }) {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
     "aria-hidden": "true",
@@ -712,189 +625,367 @@ function FrostingWave({
       right: 0,
       transform: "translateY(100%)",
       lineHeight: 0,
-      /* kill inline gap below svg */
       pointerEvents: "none",
-      zIndex: 99,
-      /*
-       * Fade the wave out slightly when scrolled so the
-       * glassmorphism effect looks clean against any bg.
-       */
-      opacity: scrolled ? 0.93 : 1,
-      transition: "opacity 0.4s ease"
+      zIndex: 0
     },
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
       xmlns: "http://www.w3.org/2000/svg",
-      viewBox: "0 0 1440 54",
+      viewBox: "0 0 1440 52",
       preserveAspectRatio: "none",
       style: {
         display: "block",
         width: "100%",
-        height: "auto"
+        height: "52px"
       },
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
-        d: "M0,0 H1440 V9 " + "Q1400,50 1360,9 " + "Q1320,44 1280,9 " + "Q1240,52 1200,9 " + "Q1160,46 1120,9 " + "Q1080,52 1040,9 " + "Q1000,44 960,9 " + "Q920,50 880,9 " + "Q840,46 800,9 " + "Q760,52 720,9 " + "Q680,44 640,9 " + "Q600,50 560,9 " + "Q520,46 480,9 " + "Q440,52 400,9 " + "Q360,44 320,9 " + "Q280,50 240,9 " + "Q200,46 160,9 " + "Q120,52 80,9 " + "Q40,44 0,9 " + "L0,0 Z",
-        fill: fill
+        d: "M0,0 H1440 V10 " + "Q1410,48 1380,10 Q1350,46 1320,10 Q1290,48 1260,10 " + "Q1230,46 1200,10 Q1170,48 1140,10 Q1110,46 1080,10 " + "Q1050,48 1020,10 Q990,46 960,10  Q930,48 900,10  " + "Q870,46 840,10  Q810,48 780,10  Q750,46 720,10  " + "Q690,48 660,10  Q630,46 600,10  Q570,48 540,10  " + "Q510,46 480,10  Q450,48 420,10  Q390,46 360,10  " + "Q330,48 300,10  Q270,46 240,10  Q210,48 180,10  " + "Q150,46 120,10  Q90,48 60,10   Q30,46 0,10   " + "L0,0 Z",
+        fill: color
       })
     })
   });
 }
 
-/* ── HamburgerIcon ──────────────────────────────────────── */
-function HamburgerIcon({
-  open,
-  color
-}) {
-  const bar = (rotation, translateY) => ({
-    display: "block",
-    width: "22px",
-    height: "1.5px",
-    backgroundColor: color,
-    borderRadius: "1px",
-    transformOrigin: "center",
-    transition: "transform 0.3s ease, opacity 0.3s ease",
-    transform: rotation,
-    opacity: translateY === "opacity0" ? 0 : 1
-  });
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    style: {
-      display: "flex",
-      flexDirection: "column",
-      gap: "5px",
-      cursor: "pointer"
-    },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-      style: bar(open ? "rotate(45deg) translate(4.5px, 4.5px)" : "none", "")
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-      style: bar("none", open ? "opacity0" : "")
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-      style: bar(open ? "rotate(-45deg) translate(4.5px, -4.5px)" : "none", "")
-    })]
+/* ─── SMOOTH SCROLL HELPER ───────────────────────────────────── */
+function smoothTo(href, offset = 0) {
+  if (!href.startsWith("#")) {
+    window.location.href = href;
+    return;
+  }
+  const el = document.querySelector(href);
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({
+    top,
+    behavior: "smooth"
   });
 }
 
-/* ── Navbar (main) ──────────────────────────────────────── */
-function Navbar() {
-  const scrolled = useScrolled(10);
-  const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [isMobile, setIsMobile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(window.innerWidth < 768);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const onResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
-  /* ── decorative dot separator ── */
-  const Dot = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+/* ─── DESKTOP NAV LINK ───────────────────────────────────────── */
+function DesktopLink({
+  label,
+  href,
+  featured,
+  scrollOffset
+}) {
+  const [hovered, setHovered] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
+    href: href,
+    onClick: e => {
+      e.preventDefault();
+      smoothTo(href, scrollOffset);
+    },
+    onMouseEnter: () => setHovered(true),
+    onMouseLeave: () => setHovered(false),
     style: {
-      display: "inline-block",
-      width: "3px",
-      height: "3px",
-      borderRadius: "50%",
-      backgroundColor: COLORS.gold,
-      opacity: 0.6,
-      flexShrink: 0,
-      alignSelf: "center"
-    }
+      fontFamily: featured ? "'Playfair Display', serif" : "'Lato', sans-serif",
+      fontStyle: featured ? "italic" : "normal",
+      fontWeight: featured ? 700 : 400,
+      fontSize: featured ? "0.90rem" : "0.72rem",
+      letterSpacing: featured ? "0.01em" : "0.17em",
+      textTransform: featured ? "none" : "uppercase",
+      color: hovered ? C.rose : featured ? "rgba(214,188,173,0.88)" : "rgba(254,239,220,0.78)",
+      textDecoration: "none",
+      transition: "color .22s ease, border-color .22s ease",
+      whiteSpace: "nowrap",
+      paddingBottom: "3px",
+      borderBottom: `1px solid ${hovered ? C.rose : "transparent"}`
+    },
+    children: label
   });
+}
+
+/* ─── ORDER CTA ──────────────────────────────────────────────── */
+function OrderCTA({
+  href = "#order",
+  compact = false
+}) {
+  const [hovered, setHovered] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
+    href: href,
+    onMouseEnter: () => setHovered(true),
+    onMouseLeave: () => setHovered(false),
+    style: {
+      fontFamily: "'Lato', sans-serif",
+      fontWeight: 700,
+      fontSize: compact ? "0.65rem" : "0.70rem",
+      letterSpacing: "0.18em",
+      textTransform: "uppercase",
+      textDecoration: "none",
+      padding: compact ? "9px 18px" : "11px 24px",
+      border: `1.5px solid ${hovered ? C.cream : C.rose}`,
+      borderRadius: 0,
+      backgroundColor: hovered ? C.cream : "transparent",
+      color: hovered ? C.dark : C.cream,
+      transition: "all .22s ease",
+      whiteSpace: "nowrap",
+      lineHeight: 1,
+      transform: hovered ? "translateY(-1px)" : "none",
+      display: "inline-block"
+    },
+    children: "Order Pickup"
+  });
+}
+
+/* ─── SEPARATOR DOT ──────────────────────────────────────────── */
+const Dot = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+  style: {
+    display: "inline-block",
+    width: "3px",
+    height: "3px",
+    borderRadius: 0,
+    background: C.rose,
+    opacity: 0.45,
+    flexShrink: 0,
+    alignSelf: "center"
+  }
+});
+
+/* ─── HAMBURGER ──────────────────────────────────────────────── */
+function Hamburger({
+  open,
+  onClick
+}) {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+    onClick: onClick,
+    "aria-label": "Toggle navigation",
+    "aria-expanded": open,
+    style: {
+      background: "rgba(254,239,220,0.07)",
+      border: "1px solid rgba(214,188,173,0.25)",
+      padding: "10px 12px",
+      cursor: "pointer",
+      borderRadius: 0,
+      display: "flex",
+      flexDirection: "column",
+      gap: "5px",
+      alignItems: "center",
+      justifyContent: "center"
+    },
+    children: [open ? "rotate(45deg) translate(4.5px, 4.5px)" : "none", "none", open ? "rotate(-45deg) translate(4.5px, -4.5px)" : "none"].map((t, i) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+      style: {
+        display: "block",
+        width: "20px",
+        height: "1.5px",
+        background: C.cream,
+        borderRadius: "1px",
+        transformOrigin: "center",
+        transition: "transform .28s ease, opacity .28s ease",
+        transform: t,
+        opacity: i === 1 && open ? 0 : 1
+      }
+    }, i))
+  });
+}
+
+/* ─── MOBILE DRAWER ──────────────────────────────────────────── */
+function MobileDrawer({
+  open,
+  scrollOffset,
+  onClose
+}) {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+    style: {
+      maxHeight: open ? "500px" : "0",
+      overflow: "hidden",
+      transition: "max-height .38s cubic-bezier(.4,0,.2,1)",
+      background: C.dark,
+      borderTop: `1px solid rgba(214,188,173,0.12)`
+    },
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+      style: {
+        padding: "1.6rem 1.5rem 2rem",
+        display: "flex",
+        flexDirection: "column",
+        gap: "0"
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+        style: {
+          fontFamily: "'Lato', sans-serif",
+          fontSize: "0.55rem",
+          letterSpacing: "0.28em",
+          textTransform: "uppercase",
+          color: C.muted,
+          marginBottom: "1.2rem",
+          paddingBottom: "0.8rem",
+          borderBottom: `1px solid rgba(214,188,173,0.12)`
+        },
+        children: "Navigate"
+      }), NAV_LINKS.map(link => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
+        href: link.href,
+        onClick: e => {
+          e.preventDefault();
+          onClose();
+          setTimeout(() => smoothTo(link.href, scrollOffset), 320);
+        },
+        style: {
+          fontFamily: link.featured ? "'Playfair Display', serif" : "'Lato', sans-serif",
+          fontStyle: link.featured ? "italic" : "normal",
+          fontWeight: link.featured ? 700 : 400,
+          fontSize: link.featured ? "1.25rem" : "0.78rem",
+          letterSpacing: link.featured ? "-0.01em" : "0.14em",
+          textTransform: link.featured ? "none" : "uppercase",
+          color: link.featured ? C.rose : "rgba(254,239,220,0.78)",
+          textDecoration: "none",
+          padding: "0.9rem 0",
+          borderBottom: `1px solid rgba(214,188,173,0.08)`,
+          display: "block",
+          transition: "color .2s"
+        },
+        children: link.label
+      }, link.label)), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
+        href: "tel:+14157812015",
+        style: {
+          fontFamily: "'Lato', sans-serif",
+          fontWeight: 300,
+          fontSize: "0.78rem",
+          letterSpacing: "0.06em",
+          color: "rgba(254,239,220,0.42)",
+          textDecoration: "none",
+          marginTop: "1.2rem",
+          marginBottom: "1.2rem",
+          display: "block"
+        },
+        children: "(415) 781-2015"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(OrderCTA, {
+        compact: true
+      })]
+    })
+  });
+}
+
+/* ─── MAIN NAVBAR ────────────────────────────────────────────── */
+function Navbar() {
+  const scrolled = useScrolled(12);
+  const adminH = useAdminBarHeight();
+  const isMobile = useMobile(860);
+  const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+
+  // nav bar actual height: 72px normal, 64px scrolled + 2px accent line
+  const navHeight = scrolled ? 66 : 74;
+  const scrollOffset = adminH + navHeight;
+  const navBg = scrolled ? "rgba(56,14,20,0.97)" : C.dark;
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!isMobile) setOpen(false);
+  }, [isMobile]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("nav", {
     style: {
-      position: "sticky",
-      top: 0,
-      zIndex: 100,
-      width: "100%",
-      paddingBottom: "2px",
-      backgroundColor: scrolled ? "rgba(42,24,14,0.96)" : COLORS.espresso,
-      backdropFilter: scrolled ? "blur(12px)" : "none",
-      WebkitBackdropFilter: scrolled ? "blur(12px)" : "none",
-      boxShadow: scrolled ? "0 4px 24px rgba(0,0,0,0.3)" : "none",
-      transition: "background-color 0.4s ease, box-shadow 0.4s ease",
+      position: "fixed",
+      top: `${adminH}px`,
+      left: 0,
+      right: 0,
+      zIndex: 99999,
       overflow: "visible"
     },
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
       style: {
         height: "2px",
-        background: `linear-gradient(90deg, transparent, ${COLORS.gold}, transparent)`
+        background: `linear-gradient(90deg,
+          transparent 0%,
+          ${C.rose} 20%,
+          ${C.muted} 50%,
+          ${C.rose} 80%,
+          transparent 100%)`
       }
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
       style: {
-        maxWidth: "1200px",
-        margin: "0 auto",
-        padding: "0 1.5rem",
-        height: "68px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        position: "relative"
+        position: "relative",
+        background: navBg,
+        backdropFilter: scrolled ? "blur(18px)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(18px)" : "none",
+        boxShadow: scrolled ? "0 8px 40px rgba(63,16,22,0.45)" : "none",
+        transition: "background .35s ease, box-shadow .35s ease"
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("a", {
-        href: "/",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
         style: {
-          textDecoration: "none",
-          flexShrink: 0
-        },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-          style: {
-            fontFamily: "'Playfair Display', serif",
-            fontStyle: "italic",
-            fontWeight: 700,
-            fontSize: "1.45rem",
-            color: COLORS.cream,
-            letterSpacing: "-0.01em",
-            lineHeight: 1
-          },
-          children: "Victoria"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-          style: {
-            display: "block",
-            fontFamily: "'Lato', sans-serif",
-            fontWeight: 300,
-            fontSize: "0.55rem",
-            letterSpacing: "0.28em",
-            textTransform: "uppercase",
-            color: COLORS.gold,
-            marginTop: "2px"
-          },
-          children: "Pastry \xB7 Homemade"
-        })]
-      }), !isMobile && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-        style: {
+          maxWidth: "1340px",
+          margin: "0 auto",
+          padding: "0 2rem",
+          height: scrolled ? "64px" : "72px",
           display: "flex",
           alignItems: "center",
-          gap: "1.1rem"
+          justifyContent: "space-between",
+          gap: "1.5rem",
+          transition: "height .3s ease"
         },
-        children: [NAV_LINKS.map((link, i) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-          children: [i > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Dot, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(NavLink, {
-            label: link.label,
-            href: link.href
-          })]
-        }, link.label)), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("a", {
+          href: "/",
           style: {
-            width: "1.5rem"
-          }
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(CTAButton, {
-          label: "Order Pickup",
-          href: "#order"
+            textDecoration: "none",
+            flexShrink: 0,
+            lineHeight: 1
+          },
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+            style: {
+              fontFamily: "'Playfair Display', serif",
+              fontStyle: "italic",
+              fontWeight: 700,
+              fontSize: scrolled ? "1.38rem" : "1.52rem",
+              color: C.cream,
+              letterSpacing: "-0.025em",
+              lineHeight: 1,
+              transition: "font-size .3s ease"
+            },
+            children: "Victoria Pastry Co."
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+            style: {
+              fontFamily: "'Lato', sans-serif",
+              fontWeight: 700,
+              fontSize: "0.50rem",
+              letterSpacing: "0.30em",
+              textTransform: "uppercase",
+              color: C.rose,
+              marginTop: "5px",
+              opacity: scrolled ? 0.7 : 1,
+              transition: "opacity .3s"
+            },
+            children: "North Beach \xA0\xB7\xA0 Est. 1914"
+          })]
+        }), !isMobile && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          style: {
+            display: "flex",
+            alignItems: "center",
+            gap: "0.9rem",
+            flex: 1,
+            justifyContent: "center"
+          },
+          children: NAV_LINKS.map((link, i) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: [i > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Dot, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(DesktopLink, {
+              ...link,
+              scrollOffset: scrollOffset
+            })]
+          }, link.label))
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+          style: {
+            display: "flex",
+            alignItems: "center",
+            gap: "1.2rem",
+            flexShrink: 0
+          },
+          children: [!isMobile && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
+            href: "tel:+14157812015",
+            style: {
+              fontFamily: "'Lato', sans-serif",
+              fontWeight: 300,
+              fontSize: "0.73rem",
+              color: "rgba(254,239,220,0.42)",
+              textDecoration: "none",
+              letterSpacing: "0.04em",
+              whiteSpace: "nowrap",
+              transition: "color .22s"
+            },
+            onMouseEnter: e => e.target.style.color = "rgba(254,239,220,0.75)",
+            onMouseLeave: e => e.target.style.color = "rgba(254,239,220,0.42)",
+            children: "(415) 781-2015"
+          }), !isMobile && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(OrderCTA, {}), isMobile && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Hamburger, {
+            open: open,
+            onClick: () => setOpen(p => !p)
+          })]
         })]
-      }), isMobile && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
-        onClick: () => setOpen(prev => !prev),
-        "aria-label": "Toggle menu",
-        style: {
-          background: "none",
-          border: "none",
-          padding: "4px",
-          cursor: "pointer",
-          lineHeight: 0
-        },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(HamburgerIcon, {
-          open: open,
-          color: COLORS.cream
-        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FrostingWave, {
+        color: navBg
+      }), isMobile && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(MobileDrawer, {
+        open: open
       })]
-    }), isMobile && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(MobileMenu, {
-      open: open
-    }), !open && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FrostingWave, {
-      fill: scrolled ? "rgba(42,24,14,0.96)" : COLORS.espresso,
-      scrolled: scrolled
     })]
   });
 }

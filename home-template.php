@@ -440,7 +440,7 @@ $vp_products = [
     'price'      => 'Slice $6.75',
     'price_full' => 'Sheet from $82.99',
     'href'       => '#princess-cake',
-    'img'        => '/wp-content/uploads/2026/04/DSC03847.jpg',
+    'img'        => '/wp-content/uploads/2026/04/DSC03841-rotated-e1777389253400.jpg',
   ],
   [
     'name'       => 'Cannoli',
@@ -644,7 +644,7 @@ $vp_products = [
           </div>
 
           <div class="vp-square-box" style="overflow:hidden; box-shadow:0 30px 80px rgba(63,16,22,.26); border:8px solid rgba(254,239,220,.30);">
-            <img class="vp-feature-main-img" src="/wp-content/uploads/2026/04/DSC03841-rotated.jpg" alt="Victoria Pastry Princess Cake">
+            <img class="vp-feature-main-img" src="/wp-content/uploads/2026/04/DSC03811-rotated.jpg" alt="Victoria Pastry Princess Cake">
           </div>
 
           <img class="vp-feature-slide-img" src="/wp-content/uploads/2026/04/DSC04197.jpg" alt="Princess Cake slice at Victoria Pastry">

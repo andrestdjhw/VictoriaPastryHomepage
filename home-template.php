@@ -392,6 +392,7 @@ get_header();
   .vp-quick-actions {
     background: var(--vp-dark);
     position: relative;
+    
   }
 
   /* ─── RESPONSIVE ────────────────────────────────────────── */

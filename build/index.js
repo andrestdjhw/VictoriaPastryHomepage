@@ -1015,6 +1015,76 @@ class Person {
 
 /***/ },
 
+/***/ "./src/scripts/VictoriaFloatingOrder.js"
+/*!**********************************************!*\
+  !*** ./src/scripts/VictoriaFloatingOrder.js ***!
+  \**********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ VictoriaFloatingOrder)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+
+
+const logoUrl = "/wp-content/uploads/2026/04/victoria-pastry-logo.png"; // ← swap for real logo path
+
+function VictoriaFloatingOrder() {
+  const [isVisible, setIsVisible] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const showTimer = setTimeout(() => {
+      setIsVisible(true);
+    }, 900);
+    return () => clearTimeout(showTimer);
+  }, []);
+  const handleClick = e => {
+    const target = document.querySelector("#order");
+    if (!target) return;
+    e.preventDefault();
+    const wpAdminBar = document.getElementById("wpadminbar");
+    const adminBarHeight = wpAdminBar ? wpAdminBar.offsetHeight : 0;
+    const navOffset = window.innerWidth >= 1024 ? 104 : 86;
+    const top = target.getBoundingClientRect().top + window.pageYOffset - adminBarHeight - navOffset - 10;
+    window.scrollTo({
+      top,
+      behavior: "smooth"
+    });
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+    className: `vp-floating-order ${isVisible ? "is-visible" : ""}`,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("a", {
+      href: "#order",
+      className: "vp-floating-order__card",
+      onClick: handleClick,
+      "aria-label": "Order from Victoria Pastry Company",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+        className: "vp-floating-order__logo",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
+          src: logoUrl,
+          alt: "",
+          "aria-hidden": "true"
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
+        className: "vp-floating-order__copy",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("strong", {
+          children: "Victoria Pastry Co."
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("small", {
+          children: "Order pickup or catering"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+        className: "vp-floating-order__btn",
+        children: "Order now"
+      })]
+    })
+  });
+}
+
+/***/ },
+
 /***/ "./node_modules/react-dom/client.js"
 /*!******************************************!*\
   !*** ./node_modules/react-dom/client.js ***!
@@ -1163,11 +1233,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scripts_ExampleReactComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./scripts/ExampleReactComponent */ "./src/scripts/ExampleReactComponent.js");
 /* harmony import */ var _scripts_Navbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scripts/Navbar */ "./src/scripts/Navbar.js");
 /* harmony import */ var _scripts_Footer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./scripts/Footer */ "./src/scripts/Footer.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _scripts_VictoriaFloatingOrder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scripts/VictoriaFloatingOrder */ "./src/scripts/VictoriaFloatingOrder.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__);
+
 
 
 
@@ -1177,16 +1249,31 @@ __webpack_require__.r(__webpack_exports__);
 
 const person1 = new _scripts_Person__WEBPACK_IMPORTED_MODULE_0__["default"]("Brad");
 if (document.querySelector("#render-navbar-here")) {
-  const navRoot = react_dom_client__WEBPACK_IMPORTED_MODULE_5__.createRoot(document.querySelector("#render-navbar-here"));
-  navRoot.render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_scripts_Navbar__WEBPACK_IMPORTED_MODULE_2__["default"], {}));
+  const navRoot = react_dom_client__WEBPACK_IMPORTED_MODULE_6__.createRoot(document.querySelector("#render-navbar-here"));
+  navRoot.render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_scripts_Navbar__WEBPACK_IMPORTED_MODULE_2__["default"], {}));
 }
 if (document.querySelector("#render-react-example-here")) {
-  const root = react_dom_client__WEBPACK_IMPORTED_MODULE_5__.createRoot(document.querySelector("#render-react-example-here"));
-  root.render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_scripts_ExampleReactComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {}));
+  const root = react_dom_client__WEBPACK_IMPORTED_MODULE_6__.createRoot(document.querySelector("#render-react-example-here"));
+  root.render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_scripts_ExampleReactComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {}));
 }
 if (document.querySelector("#render-footer-here")) {
-  const footerRoot = react_dom_client__WEBPACK_IMPORTED_MODULE_5__.createRoot(document.querySelector("#render-footer-here"));
-  footerRoot.render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_scripts_Footer__WEBPACK_IMPORTED_MODULE_3__["default"], {}));
+  const footerRoot = react_dom_client__WEBPACK_IMPORTED_MODULE_6__.createRoot(document.querySelector("#render-footer-here"));
+  footerRoot.render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_scripts_Footer__WEBPACK_IMPORTED_MODULE_3__["default"], {}));
+}
+
+/**
+ * Victoria Pastry floating order CTA
+ * Se monta automáticamente solo en la home.
+ */
+if (document.querySelector(".vp-home")) {
+  let floatingRoot = document.querySelector("#vp-floating-order-root");
+  if (!floatingRoot) {
+    floatingRoot = document.createElement("div");
+    floatingRoot.id = "vp-floating-order-root";
+    document.body.appendChild(floatingRoot);
+  }
+  const root = react_dom_client__WEBPACK_IMPORTED_MODULE_6__.createRoot(floatingRoot);
+  root.render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_scripts_VictoriaFloatingOrder__WEBPACK_IMPORTED_MODULE_4__["default"], {}));
 }
 })();
 

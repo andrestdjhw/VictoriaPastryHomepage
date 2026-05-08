@@ -152,7 +152,7 @@ get_header();
   .vp-quick-actions { position:relative; overflow:hidden; background-color:#2e1018; }
   .vp-quick-actions-bg {
     position:absolute; inset:0;
-    background-image:url('http://victoria-pastry.local/wp-content/uploads/2026/05/Victoria-Prints-03.png');
+    background-image:url('/wp-content/uploads/2026/05/Victoria-Prints-03.png');
     background-size:320px auto; background-attachment:fixed; background-position:center;
     opacity:.08; z-index:0;
   }
@@ -206,7 +206,7 @@ get_header();
   }
   .vp-order-pattern {
     position:absolute; inset:0;
-    background-image:url('http://victoria-pastry.local/wp-content/uploads/2026/05/Victoria-Prints-03.png');
+    background-image:url('/wp-content/uploads/2026/05/Victoria-Prints-03.png');
     background-size:380px auto;
     background-attachment:fixed;
     background-position:center top;
@@ -234,7 +234,7 @@ get_header();
   }
   .vp-quote-pattern {
     position:absolute; inset:0;
-    background-image:url('http://victoria-pastry.local/wp-content/uploads/2026/05/Victoria-Prints-04.png');
+    background-image:url('/wp-content/uploads/2026/05/Victoria-Prints-04.png');
     background-size:280px auto; background-attachment:fixed; background-position:center; background-repeat:repeat;
     opacity:.06; pointer-events:none; z-index:0;
   }
@@ -511,7 +511,7 @@ $vp_products = [
   <!-- ═══ BRAND QUOTE — vp-dark + Print-04 + ilustración centrada ═══ -->
   <section class="vp-quote-section">
     <div class="vp-quote-pattern"></div>
-    <img class="vp-quote-ilustracion" src="http://victoria-pastry.local/wp-content/uploads/2026/05/ilustracion-burgundy-scaled.png" alt="" aria-hidden="true">
+    <img class="vp-quote-ilustracion" src="/wp-content/uploads/2026/05/ilustracion-burgundy-scaled.png" alt="" aria-hidden="true">
     <div class="vp-quote-inner max-w-4xl mx-auto px-6 text-center vp-reveal">
       <div class="vp-ornament mb-8" style="justify-content:center;color:rgba(214,188,173,.50);">
         <span class="vp-label" style="color:rgba(214,188,173,.50);">Our Story</span>

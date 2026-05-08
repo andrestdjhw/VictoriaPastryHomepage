@@ -380,7 +380,7 @@ export default function Navbar() {
 
           <a href="/" style={{ textDecoration: "none", flexShrink: 0, lineHeight: 1 }}>
             <img
-              src="http://victoria-pastry.local/wp-content/uploads/2026/05/VICTORIA_Imagotipo.png"
+              src="/wp-content/uploads/2026/05/VICTORIA_Imagotipo.png"
               alt="Victoria Pastry Company"
               style={{
                 height: scrolled ? "56px" : "70px",

@@ -87,7 +87,8 @@ function getAdminBarHeight() {
   const bar = document.getElementById("wpadminbar");
   return bar ? bar.offsetHeight : 0;
 }
-function smoothTo(href, offset = 0) {
+function smoothTo(href, offset) {
+  if (offset === undefined) offset = 0;
   if (!href.startsWith("#")) {
     window.location.href = href;
     return;
@@ -96,7 +97,7 @@ function smoothTo(href, offset = 0) {
   if (!el) return;
   const top = el.getBoundingClientRect().top + window.scrollY - offset;
   window.scrollTo({
-    top,
+    top: top,
     behavior: "smooth"
   });
 }
@@ -106,14 +107,21 @@ function FooterLink({
   featured
 }) {
   const [hovered, setHovered] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const handleClick = function (e) {
+    e.preventDefault();
+    smoothTo(href, getAdminBarHeight() + 90);
+  };
+  const handleEnter = function () {
+    setHovered(true);
+  };
+  const handleLeave = function () {
+    setHovered(false);
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
     href: href,
-    onClick: e => {
-      e.preventDefault();
-      smoothTo(href, getAdminBarHeight() + 74);
-    },
-    onMouseEnter: () => setHovered(true),
-    onMouseLeave: () => setHovered(false),
+    onClick: handleClick,
+    onMouseEnter: handleEnter,
+    onMouseLeave: handleLeave,
     style: {
       fontFamily: featured ? "'Playfair Display', serif" : "'Lato', sans-serif",
       fontStyle: featured ? "italic" : "normal",
@@ -187,67 +195,6 @@ function Badge({
     }), children]
   });
 }
-function MiniTable({
-  left = false
-}) {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    "aria-hidden": "true",
-    style: {
-      position: "absolute",
-      bottom: "10px",
-      [left ? "left" : "right"]: left ? "5%" : "7%",
-      width: "135px",
-      height: "80px",
-      opacity: 0.055,
-      pointerEvents: "none"
-    },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      style: {
-        position: "absolute",
-        left: "50%",
-        bottom: "44px",
-        width: "90px",
-        height: "8px",
-        transform: "translateX(-50%)",
-        background: C.rose,
-        borderRadius: "999px"
-      }
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      style: {
-        position: "absolute",
-        left: "50%",
-        bottom: "0",
-        width: "2px",
-        height: "46px",
-        background: C.rose
-      }
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      style: {
-        position: "absolute",
-        left: "20px",
-        bottom: "8px",
-        width: "32px",
-        height: "32px",
-        border: `2px solid ${C.rose}`,
-        borderTop: "none",
-        borderRadius: "0 0 18px 18px",
-        transform: "rotate(-7deg)"
-      }
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      style: {
-        position: "absolute",
-        right: "20px",
-        bottom: "8px",
-        width: "32px",
-        height: "32px",
-        border: `2px solid ${C.rose}`,
-        borderTop: "none",
-        borderRadius: "0 0 18px 18px",
-        transform: "rotate(7deg)"
-      }
-    })]
-  });
-}
 function Footer() {
   const year = new Date().getFullYear();
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("footer", {
@@ -262,9 +209,7 @@ function Footer() {
       style: {
         position: "absolute",
         inset: 0,
-        background: `linear-gradient(180deg, ${C.deep} 0%, #26080d 100%),
-             radial-gradient(circle at 20% 10%, rgba(214,188,173,.05), transparent 28%),
-             radial-gradient(circle at 82% 32%, rgba(157,121,97,.06), transparent 34%)`,
+        background: "linear-gradient(180deg, " + C.deep + " 0%, #26080d 100%)",
         pointerEvents: "none"
       }
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
@@ -279,9 +224,7 @@ function Footer() {
         WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 78%, transparent 100%)",
         pointerEvents: "none"
       }
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(MiniTable, {
-      left: true
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(MiniTable, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
       style: {
         position: "relative",
         maxWidth: "1160px",
@@ -297,35 +240,22 @@ function Footer() {
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
         className: "vp-footer-grid",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("a", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
             href: "/",
             style: {
               textDecoration: "none",
               display: "inline-block"
             },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
+              src: "http://victoria-pastry.local/wp-content/uploads/2026/05/VICTORIA_Isologo.png",
+              alt: "Victoria Pastry Company",
               style: {
-                fontFamily: "'Playfair Display', serif",
-                fontStyle: "italic",
-                fontWeight: 700,
-                fontSize: "2rem",
-                letterSpacing: "-0.035em",
-                color: "rgba(254,239,224,.88)",
-                lineHeight: 1
-              },
-              children: "Victoria Pastry Co."
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-              style: {
-                fontFamily: "'Lato', sans-serif",
-                fontWeight: 700,
-                fontSize: "0.5rem",
-                letterSpacing: "0.31em",
-                textTransform: "uppercase",
-                color: "rgba(214,188,173,.62)",
-                marginTop: "8px"
-              },
-              children: "North Beach \xA0\xB7\xA0 Est. 1914"
-            })]
+                height: "110px",
+                width: "110px",
+                display: "block",
+                objectFit: "contain"
+              }
+            })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
             style: {
               fontFamily: "'Playfair Display', serif",
@@ -372,9 +302,11 @@ function Footer() {
               flexDirection: "column",
               gap: ".85rem"
             },
-            children: FOOTER_LINKS.map(link => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FooterLink, {
-              ...link
-            }, link.label))
+            children: FOOTER_LINKS.map(function (link) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FooterLink, {
+                ...link
+              }, link.label);
+            })
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
           style: {
@@ -470,9 +402,26 @@ function Footer() {
             })]
           })]
         })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+        style: {
+          marginTop: "3rem",
+          display: "flex",
+          justifyContent: "center"
+        },
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
+          src: "http://victoria-pastry.local/wp-content/uploads/2026/05/VICTORIA_Sello-1-scaled.png",
+          alt: "A Tradition Since 1914",
+          style: {
+            height: "56px",
+            width: "auto",
+            objectFit: "contain",
+            opacity: 0.6,
+            filter: "brightness(1.1)"
+          }
+        })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
         style: {
-          marginTop: "3.6rem",
+          marginTop: "1.5rem",
           paddingTop: "1.25rem",
           borderTop: "1px solid rgba(254,239,220,.07)",
           display: "flex",
@@ -577,37 +526,47 @@ const NAV_LINKS = [{
 }];
 
 /* ─── HOOKS ──────────────────────────────────────────────────── */
-function useScrolled(threshold = 12) {
+function useScrolled(threshold) {
+  if (threshold === undefined) threshold = 12;
   const [scrolled, setScrolled] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const fn = () => setScrolled(window.scrollY > threshold);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    const fn = function () {
+      setScrolled(window.scrollY > threshold);
+    };
     window.addEventListener("scroll", fn, {
       passive: true
     });
     fn();
-    return () => window.removeEventListener("scroll", fn);
+    return function () {
+      window.removeEventListener("scroll", fn);
+    };
   }, [threshold]);
   return scrolled;
 }
 function useAdminBarHeight() {
   const [h, setH] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     const bar = document.getElementById("wpadminbar");
     if (bar) {
-      setH(bar.offsetHeight); // ya detecta 32px desktop / 46px mobile
+      setH(bar.offsetHeight);
     } else {
       setH(0);
     }
   }, []);
   return h;
 }
-function useMobile(breakpoint = 860) {
+function useMobile(breakpoint) {
+  if (breakpoint === undefined) breakpoint = 860;
   const [mobile, setMobile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const fn = () => setMobile(window.innerWidth < breakpoint);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    const fn = function () {
+      setMobile(window.innerWidth < breakpoint);
+    };
     fn();
     window.addEventListener("resize", fn);
-    return () => window.removeEventListener("resize", fn);
+    return function () {
+      window.removeEventListener("resize", fn);
+    };
   }, [breakpoint]);
   return mobile;
 }
@@ -646,7 +605,8 @@ function FrostingWave({
 }
 
 /* ─── SMOOTH SCROLL HELPER ───────────────────────────────────── */
-function smoothTo(href, offset = 0) {
+function smoothTo(href, offset) {
+  if (offset === undefined) offset = 0;
   if (!href.startsWith("#")) {
     window.location.href = href;
     return;
@@ -655,7 +615,7 @@ function smoothTo(href, offset = 0) {
   if (!el) return;
   const top = el.getBoundingClientRect().top + window.scrollY - offset;
   window.scrollTo({
-    top,
+    top: top,
     behavior: "smooth"
   });
 }
@@ -668,14 +628,21 @@ function DesktopLink({
   scrollOffset
 }) {
   const [hovered, setHovered] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const handleClick = function (e) {
+    e.preventDefault();
+    smoothTo(href, scrollOffset);
+  };
+  const handleMouseEnter = function () {
+    setHovered(true);
+  };
+  const handleMouseLeave = function () {
+    setHovered(false);
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
     href: href,
-    onClick: e => {
-      e.preventDefault();
-      smoothTo(href, scrollOffset);
-    },
-    onMouseEnter: () => setHovered(true),
-    onMouseLeave: () => setHovered(false),
+    onClick: handleClick,
+    onMouseEnter: handleMouseEnter,
+    onMouseLeave: handleMouseLeave,
     style: {
       fontFamily: featured ? "'Playfair Display', serif" : "'Lato', sans-serif",
       fontStyle: featured ? "italic" : "normal",
@@ -688,7 +655,7 @@ function DesktopLink({
       transition: "color .22s ease, border-color .22s ease",
       whiteSpace: "nowrap",
       paddingBottom: "3px",
-      borderBottom: `1px solid ${hovered ? C.rose : "transparent"}`
+      borderBottom: "1px solid " + (hovered ? C.rose : "transparent")
     },
     children: label
   });
@@ -696,14 +663,22 @@ function DesktopLink({
 
 /* ─── ORDER CTA ──────────────────────────────────────────────── */
 function OrderCTA({
-  href = "#order",
-  compact = false
+  href,
+  compact
 }) {
+  if (href === undefined) href = "#order";
+  if (compact === undefined) compact = false;
   const [hovered, setHovered] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const handleMouseEnter = function () {
+    setHovered(true);
+  };
+  const handleMouseLeave = function () {
+    setHovered(false);
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
     href: href,
-    onMouseEnter: () => setHovered(true),
-    onMouseLeave: () => setHovered(false),
+    onMouseEnter: handleMouseEnter,
+    onMouseLeave: handleMouseLeave,
     style: {
       fontFamily: "'Lato', sans-serif",
       fontWeight: 700,
@@ -712,7 +687,7 @@ function OrderCTA({
       textTransform: "uppercase",
       textDecoration: "none",
       padding: compact ? "9px 18px" : "11px 24px",
-      border: `1.5px solid ${hovered ? C.cream : C.rose}`,
+      border: "1.5px solid " + (hovered ? C.cream : C.rose),
       borderRadius: 0,
       backgroundColor: hovered ? C.cream : "transparent",
       color: hovered ? C.dark : C.cream,
@@ -727,24 +702,27 @@ function OrderCTA({
 }
 
 /* ─── SEPARATOR DOT ──────────────────────────────────────────── */
-const Dot = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-  style: {
-    display: "inline-block",
-    width: "3px",
-    height: "3px",
-    borderRadius: 0,
-    background: C.rose,
-    opacity: 0.45,
-    flexShrink: 0,
-    alignSelf: "center"
-  }
-});
+function Dot() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+    style: {
+      display: "inline-block",
+      width: "3px",
+      height: "3px",
+      borderRadius: 0,
+      background: C.rose,
+      opacity: 0.45,
+      flexShrink: 0,
+      alignSelf: "center"
+    }
+  });
+}
 
 /* ─── HAMBURGER ──────────────────────────────────────────────── */
 function Hamburger({
   open,
   onClick
 }) {
+  const transforms = [open ? "rotate(45deg) translate(4.5px, 4.5px)" : "none", "none", open ? "rotate(-45deg) translate(4.5px, -4.5px)" : "none"];
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
     onClick: onClick,
     "aria-label": "Toggle navigation",
@@ -761,19 +739,21 @@ function Hamburger({
       alignItems: "center",
       justifyContent: "center"
     },
-    children: [open ? "rotate(45deg) translate(4.5px, 4.5px)" : "none", "none", open ? "rotate(-45deg) translate(4.5px, -4.5px)" : "none"].map((t, i) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-      style: {
-        display: "block",
-        width: "20px",
-        height: "1.5px",
-        background: C.cream,
-        borderRadius: "1px",
-        transformOrigin: "center",
-        transition: "transform .28s ease, opacity .28s ease",
-        transform: t,
-        opacity: i === 1 && open ? 0 : 1
-      }
-    }, i))
+    children: transforms.map(function (t, i) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+        style: {
+          display: "block",
+          width: "20px",
+          height: "1.5px",
+          background: C.cream,
+          borderRadius: "1px",
+          transformOrigin: "center",
+          transition: "transform .28s ease, opacity .28s ease",
+          transform: t,
+          opacity: i === 1 && open ? 0 : 1
+        }
+      }, i);
+    })
   });
 }
 
@@ -789,7 +769,7 @@ function MobileDrawer({
       overflow: "hidden",
       transition: "max-height .38s cubic-bezier(.4,0,.2,1)",
       background: C.dark,
-      borderTop: `1px solid rgba(214,188,173,0.12)`
+      borderTop: "1px solid rgba(214,188,173,0.12)"
     },
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
       style: {
@@ -807,32 +787,37 @@ function MobileDrawer({
           color: C.muted,
           marginBottom: "1.2rem",
           paddingBottom: "0.8rem",
-          borderBottom: `1px solid rgba(214,188,173,0.12)`
+          borderBottom: "1px solid rgba(214,188,173,0.12)"
         },
         children: "Navigate"
-      }), NAV_LINKS.map(link => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
-        href: link.href,
-        onClick: e => {
+      }), NAV_LINKS.map(function (link) {
+        const handleClick = function (e) {
           e.preventDefault();
           onClose();
-          setTimeout(() => smoothTo(link.href, scrollOffset), 320);
-        },
-        style: {
-          fontFamily: link.featured ? "'Playfair Display', serif" : "'Lato', sans-serif",
-          fontStyle: link.featured ? "italic" : "normal",
-          fontWeight: link.featured ? 700 : 400,
-          fontSize: link.featured ? "1.25rem" : "0.78rem",
-          letterSpacing: link.featured ? "-0.01em" : "0.14em",
-          textTransform: link.featured ? "none" : "uppercase",
-          color: link.featured ? C.rose : "rgba(254,239,220,0.78)",
-          textDecoration: "none",
-          padding: "0.9rem 0",
-          borderBottom: `1px solid rgba(214,188,173,0.08)`,
-          display: "block",
-          transition: "color .2s"
-        },
-        children: link.label
-      }, link.label)), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
+          setTimeout(function () {
+            smoothTo(link.href, scrollOffset);
+          }, 320);
+        };
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
+          href: link.href,
+          onClick: handleClick,
+          style: {
+            fontFamily: link.featured ? "'Playfair Display', serif" : "'Lato', sans-serif",
+            fontStyle: link.featured ? "italic" : "normal",
+            fontWeight: link.featured ? 700 : 400,
+            fontSize: link.featured ? "1.25rem" : "0.78rem",
+            letterSpacing: link.featured ? "-0.01em" : "0.14em",
+            textTransform: link.featured ? "none" : "uppercase",
+            color: link.featured ? C.rose : "rgba(254,239,220,0.78)",
+            textDecoration: "none",
+            padding: "0.9rem 0",
+            borderBottom: "1px solid rgba(214,188,173,0.08)",
+            display: "block",
+            transition: "color .2s"
+          },
+          children: link.label
+        }, link.label);
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
         href: "tel:+14157812015",
         style: {
           fontFamily: "'Lato', sans-serif",
@@ -859,18 +844,30 @@ function Navbar() {
   const adminH = useAdminBarHeight();
   const isMobile = useMobile(860);
   const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-
-  // nav bar actual height: 72px normal, 64px scrolled + 2px accent line
-  const navHeight = scrolled ? 66 : 74;
+  const navHeight = scrolled ? 80 : 90;
   const scrollOffset = adminH + navHeight;
   const navBg = scrolled ? "rgba(56,14,20,0.97)" : C.dark;
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (!isMobile) setOpen(false);
   }, [isMobile]);
+  const handleHamburger = function () {
+    setOpen(function (p) {
+      return !p;
+    });
+  };
+  const handleClose = function () {
+    setOpen(false);
+  };
+  const phoneEnter = function (e) {
+    e.target.style.color = "rgba(254,239,220,0.75)";
+  };
+  const phoneLeave = function (e) {
+    e.target.style.color = "rgba(254,239,220,0.42)";
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("nav", {
     style: {
       position: "fixed",
-      top: `${adminH}px`,
+      top: adminH + "px",
       left: 0,
       right: 0,
       zIndex: 99999,
@@ -879,12 +876,7 @@ function Navbar() {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
       style: {
         height: "2px",
-        background: `linear-gradient(90deg,
-          transparent 0%,
-          ${C.rose} 20%,
-          ${C.muted} 50%,
-          ${C.rose} 80%,
-          transparent 100%)`
+        background: "linear-gradient(90deg, transparent 0%, " + C.rose + " 20%, " + C.muted + " 50%, " + C.rose + " 80%, transparent 100%)"
       }
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
       style: {
@@ -900,46 +892,32 @@ function Navbar() {
           maxWidth: "1340px",
           margin: "0 auto",
           padding: "0 2rem",
-          height: scrolled ? "64px" : "72px",
+          height: scrolled ? "80px" : "90px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           gap: "1.5rem",
           transition: "height .3s ease"
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("a", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
           href: "/",
           style: {
             textDecoration: "none",
             flexShrink: 0,
             lineHeight: 1
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
+            src: "http://victoria-pastry.local/wp-content/uploads/2026/05/VICTORIA_Imagotipo.png",
+            alt: "Victoria Pastry Company",
             style: {
-              fontFamily: "'Playfair Display', serif",
-              fontStyle: "italic",
-              fontWeight: 700,
-              fontSize: scrolled ? "1.38rem" : "1.52rem",
-              color: C.cream,
-              letterSpacing: "-0.025em",
-              lineHeight: 1,
-              transition: "font-size .3s ease"
-            },
-            children: "Victoria Pastry Co."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-            style: {
-              fontFamily: "'Lato', sans-serif",
-              fontWeight: 700,
-              fontSize: "0.50rem",
-              letterSpacing: "0.30em",
-              textTransform: "uppercase",
-              color: C.rose,
-              marginTop: "5px",
-              opacity: scrolled ? 0.7 : 1,
-              transition: "opacity .3s"
-            },
-            children: "North Beach \xA0\xB7\xA0 Est. 1914"
-          })]
+              height: scrolled ? "56px" : "70px",
+              width: scrolled ? "240px" : "300px",
+              objectFit: "contain",
+              objectPosition: "left center",
+              display: "block",
+              transition: "height .3s ease, width .3s ease"
+            }
+          })
         }), !isMobile && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
           style: {
             display: "flex",
@@ -948,12 +926,16 @@ function Navbar() {
             flex: 1,
             justifyContent: "center"
           },
-          children: NAV_LINKS.map((link, i) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-            children: [i > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Dot, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(DesktopLink, {
-              ...link,
-              scrollOffset: scrollOffset
-            })]
-          }, link.label))
+          children: NAV_LINKS.map(function (link, i) {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+              children: [i > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Dot, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(DesktopLink, {
+                label: link.label,
+                href: link.href,
+                featured: link.featured,
+                scrollOffset: scrollOffset
+              })]
+            }, link.label);
+          })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
           style: {
             display: "flex",
@@ -963,6 +945,8 @@ function Navbar() {
           },
           children: [!isMobile && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
             href: "tel:+14157812015",
+            onMouseEnter: phoneEnter,
+            onMouseLeave: phoneLeave,
             style: {
               fontFamily: "'Lato', sans-serif",
               fontWeight: 300,
@@ -973,18 +957,18 @@ function Navbar() {
               whiteSpace: "nowrap",
               transition: "color .22s"
             },
-            onMouseEnter: e => e.target.style.color = "rgba(254,239,220,0.75)",
-            onMouseLeave: e => e.target.style.color = "rgba(254,239,220,0.42)",
             children: "(415) 781-2015"
           }), !isMobile && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(OrderCTA, {}), isMobile && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Hamburger, {
             open: open,
-            onClick: () => setOpen(p => !p)
+            onClick: handleHamburger
           })]
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FrostingWave, {
         color: navBg
       }), isMobile && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(MobileDrawer, {
-        open: open
+        open: open,
+        scrollOffset: scrollOffset,
+        onClose: handleClose
       })]
     })]
   });
@@ -1031,7 +1015,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
 
 
-const logoUrl = "/wp-content/uploads/2026/04/victoria-pastry-logo.png"; // ← swap for real logo path
+const logoUrl = "/wp-content/uploads/2026/05/VICTORIA_Isotipo-2.png"; // ← swap for real logo path
 
 function VictoriaFloatingOrder() {
   const [isVisible, setIsVisible] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);

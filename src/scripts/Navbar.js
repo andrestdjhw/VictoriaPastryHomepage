@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect } from "react"
 
 /* ─── BRAND TOKENS ──────────────────────────────────────────── */
 const C = {
@@ -13,44 +13,43 @@ const NAV_LINKS = [
   { label: "Menu",          href: "#menu",          featured: false },
   { label: "Princess Cake", href: "#princess-cake", featured: true  },
   { label: "Catering",      href: "#catering",      featured: false },
-  { label: "Our Story",     href: "#visit",     featured: false },
+  { label: "Our Story",     href: "#visit",         featured: false },
 ]
 
 /* ─── HOOKS ──────────────────────────────────────────────────── */
-function useScrolled(threshold = 12) {
+function useScrolled(threshold) {
+  if (threshold === undefined) threshold = 12
   const [scrolled, setScrolled] = useState(false)
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > threshold)
+  useEffect(function() {
+    const fn = function() { setScrolled(window.scrollY > threshold) }
     window.addEventListener("scroll", fn, { passive: true })
     fn()
-    return () => window.removeEventListener("scroll", fn)
+    return function() { window.removeEventListener("scroll", fn) }
   }, [threshold])
   return scrolled
 }
 
 function useAdminBarHeight() {
   const [h, setH] = useState(0)
-
-  useEffect(() => {
+  useEffect(function() {
     const bar = document.getElementById("wpadminbar")
-
     if (bar) {
-      setH(bar.offsetHeight) // ya detecta 32px desktop / 46px mobile
+      setH(bar.offsetHeight)
     } else {
       setH(0)
     }
   }, [])
-
   return h
 }
 
-function useMobile(breakpoint = 860) {
+function useMobile(breakpoint) {
+  if (breakpoint === undefined) breakpoint = 860
   const [mobile, setMobile] = useState(false)
-  useEffect(() => {
-    const fn = () => setMobile(window.innerWidth < breakpoint)
+  useEffect(function() {
+    const fn = function() { setMobile(window.innerWidth < breakpoint) }
     fn()
     window.addEventListener("resize", fn)
-    return () => window.removeEventListener("resize", fn)
+    return function() { window.removeEventListener("resize", fn) }
   }, [breakpoint])
   return mobile
 }
@@ -95,24 +94,33 @@ function FrostingWave({ color }) {
 }
 
 /* ─── SMOOTH SCROLL HELPER ───────────────────────────────────── */
-function smoothTo(href, offset = 0) {
+function smoothTo(href, offset) {
+  if (offset === undefined) offset = 0
   if (!href.startsWith("#")) { window.location.href = href; return }
   const el = document.querySelector(href)
   if (!el) return
   const top = el.getBoundingClientRect().top + window.scrollY - offset
-  window.scrollTo({ top, behavior: "smooth" })
+  window.scrollTo({ top: top, behavior: "smooth" })
 }
 
 /* ─── DESKTOP NAV LINK ───────────────────────────────────────── */
 function DesktopLink({ label, href, featured, scrollOffset }) {
   const [hovered, setHovered] = useState(false)
 
+  const handleClick = function(e) {
+    e.preventDefault()
+    smoothTo(href, scrollOffset)
+  }
+
+  const handleMouseEnter = function() { setHovered(true) }
+  const handleMouseLeave = function() { setHovered(false) }
+
   return (
     <a
       href={href}
-      onClick={(e) => { e.preventDefault(); smoothTo(href, scrollOffset) }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       style={{
         fontFamily:    featured ? "'Playfair Display', serif" : "'Lato', sans-serif",
         fontStyle:     featured ? "italic" : "normal",
@@ -125,7 +133,7 @@ function DesktopLink({ label, href, featured, scrollOffset }) {
         transition: "color .22s ease, border-color .22s ease",
         whiteSpace: "nowrap",
         paddingBottom: "3px",
-        borderBottom: `1px solid ${hovered ? C.rose : "transparent"}`,
+        borderBottom: "1px solid " + (hovered ? C.rose : "transparent"),
       }}
     >
       {label}
@@ -134,13 +142,19 @@ function DesktopLink({ label, href, featured, scrollOffset }) {
 }
 
 /* ─── ORDER CTA ──────────────────────────────────────────────── */
-function OrderCTA({ href = "#order", compact = false }) {
+function OrderCTA({ href, compact }) {
+  if (href === undefined) href = "#order"
+  if (compact === undefined) compact = false
   const [hovered, setHovered] = useState(false)
+
+  const handleMouseEnter = function() { setHovered(true) }
+  const handleMouseLeave = function() { setHovered(false) }
+
   return (
     <a
       href={href}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       style={{
         fontFamily: "'Lato', sans-serif",
         fontWeight: 700,
@@ -149,7 +163,7 @@ function OrderCTA({ href = "#order", compact = false }) {
         textTransform: "uppercase",
         textDecoration: "none",
         padding: compact ? "9px 18px" : "11px 24px",
-        border: `1.5px solid ${hovered ? C.cream : C.rose}`,
+        border: "1.5px solid " + (hovered ? C.cream : C.rose),
         borderRadius: 0,
         backgroundColor: hovered ? C.cream : "transparent",
         color: hovered ? C.dark : C.cream,
@@ -166,20 +180,28 @@ function OrderCTA({ href = "#order", compact = false }) {
 }
 
 /* ─── SEPARATOR DOT ──────────────────────────────────────────── */
-const Dot = () => (
-  <span style={{
-    display: "inline-block",
-    width: "3px", height: "3px",
-    borderRadius: 0,
-    background: C.rose,
-    opacity: 0.45,
-    flexShrink: 0,
-    alignSelf: "center",
-  }} />
-)
+function Dot() {
+  return (
+    <span style={{
+      display: "inline-block",
+      width: "3px", height: "3px",
+      borderRadius: 0,
+      background: C.rose,
+      opacity: 0.45,
+      flexShrink: 0,
+      alignSelf: "center",
+    }} />
+  )
+}
 
 /* ─── HAMBURGER ──────────────────────────────────────────────── */
 function Hamburger({ open, onClick }) {
+  const transforms = [
+    open ? "rotate(45deg) translate(4.5px, 4.5px)" : "none",
+    "none",
+    open ? "rotate(-45deg) translate(4.5px, -4.5px)" : "none",
+  ]
+
   return (
     <button
       onClick={onClick}
@@ -198,22 +220,20 @@ function Hamburger({ open, onClick }) {
         justifyContent: "center",
       }}
     >
-      {[
-        open ? "rotate(45deg) translate(4.5px, 4.5px)" : "none",
-        "none",
-        open ? "rotate(-45deg) translate(4.5px, -4.5px)" : "none",
-      ].map((t, i) => (
-        <span key={i} style={{
-          display: "block",
-          width: "20px", height: "1.5px",
-          background: C.cream,
-          borderRadius: "1px",
-          transformOrigin: "center",
-          transition: "transform .28s ease, opacity .28s ease",
-          transform: t,
-          opacity: i === 1 && open ? 0 : 1,
-        }} />
-      ))}
+      {transforms.map(function(t, i) {
+        return (
+          <span key={i} style={{
+            display: "block",
+            width: "20px", height: "1.5px",
+            background: C.cream,
+            borderRadius: "1px",
+            transformOrigin: "center",
+            transition: "transform .28s ease, opacity .28s ease",
+            transform: t,
+            opacity: i === 1 && open ? 0 : 1,
+          }} />
+        )
+      })}
     </button>
   )
 }
@@ -226,7 +246,7 @@ function MobileDrawer({ open, scrollOffset, onClose }) {
       overflow: "hidden",
       transition: "max-height .38s cubic-bezier(.4,0,.2,1)",
       background: C.dark,
-      borderTop: `1px solid rgba(214,188,173,0.12)`,
+      borderTop: "1px solid rgba(214,188,173,0.12)",
     }}>
       <div style={{
         padding: "1.6rem 1.5rem 2rem",
@@ -234,7 +254,6 @@ function MobileDrawer({ open, scrollOffset, onClose }) {
         flexDirection: "column",
         gap: "0",
       }}>
-        {/* Section label */}
         <div style={{
           fontFamily: "'Lato', sans-serif",
           fontSize: "0.55rem",
@@ -243,40 +262,42 @@ function MobileDrawer({ open, scrollOffset, onClose }) {
           color: C.muted,
           marginBottom: "1.2rem",
           paddingBottom: "0.8rem",
-          borderBottom: `1px solid rgba(214,188,173,0.12)`,
+          borderBottom: "1px solid rgba(214,188,173,0.12)",
         }}>
           Navigate
         </div>
 
-        {NAV_LINKS.map((link) => (
-          <a
-            key={link.label}
-            href={link.href}
-            onClick={(e) => {
-              e.preventDefault()
-              onClose()
-              setTimeout(() => smoothTo(link.href, scrollOffset), 320)
-            }}
-            style={{
-              fontFamily: link.featured ? "'Playfair Display', serif" : "'Lato', sans-serif",
-              fontStyle: link.featured ? "italic" : "normal",
-              fontWeight: link.featured ? 700 : 400,
-              fontSize: link.featured ? "1.25rem" : "0.78rem",
-              letterSpacing: link.featured ? "-0.01em" : "0.14em",
-              textTransform: link.featured ? "none" : "uppercase",
-              color: link.featured ? C.rose : "rgba(254,239,220,0.78)",
-              textDecoration: "none",
-              padding: "0.9rem 0",
-              borderBottom: `1px solid rgba(214,188,173,0.08)`,
-              display: "block",
-              transition: "color .2s",
-            }}
-          >
-            {link.label}
-          </a>
-        ))}
+        {NAV_LINKS.map(function(link) {
+          const handleClick = function(e) {
+            e.preventDefault()
+            onClose()
+            setTimeout(function() { smoothTo(link.href, scrollOffset) }, 320)
+          }
+          return (
+            <a
+              key={link.label}
+              href={link.href}
+              onClick={handleClick}
+              style={{
+                fontFamily: link.featured ? "'Playfair Display', serif" : "'Lato', sans-serif",
+                fontStyle: link.featured ? "italic" : "normal",
+                fontWeight: link.featured ? 700 : 400,
+                fontSize: link.featured ? "1.25rem" : "0.78rem",
+                letterSpacing: link.featured ? "-0.01em" : "0.14em",
+                textTransform: link.featured ? "none" : "uppercase",
+                color: link.featured ? C.rose : "rgba(254,239,220,0.78)",
+                textDecoration: "none",
+                padding: "0.9rem 0",
+                borderBottom: "1px solid rgba(214,188,173,0.08)",
+                display: "block",
+                transition: "color .2s",
+              }}
+            >
+              {link.label}
+            </a>
+          )
+        })}
 
-        {/* Phone */}
         <a
           href="tel:+14157812015"
           style={{
@@ -294,7 +315,7 @@ function MobileDrawer({ open, scrollOffset, onClose }) {
           (415) 781-2015
         </a>
 
-        <OrderCTA compact />
+        <OrderCTA compact={true} />
       </div>
     </div>
   )
@@ -302,52 +323,46 @@ function MobileDrawer({ open, scrollOffset, onClose }) {
 
 /* ─── MAIN NAVBAR ────────────────────────────────────────────── */
 export default function Navbar() {
-  const scrolled    = useScrolled(12)
-  const adminH      = useAdminBarHeight()
-  const isMobile    = useMobile(860)
+  const scrolled  = useScrolled(12)
+  const adminH    = useAdminBarHeight()
+  const isMobile  = useMobile(860)
   const [open, setOpen] = useState(false)
 
-  // nav bar actual height: 72px normal, 64px scrolled + 2px accent line
-  const navHeight = scrolled ? 66 : 74
+  const navHeight    = scrolled ? 80 : 90
   const scrollOffset = adminH + navHeight
+  const navBg        = scrolled ? "rgba(56,14,20,0.97)" : C.dark
 
-  const navBg = scrolled ? "rgba(56,14,20,0.97)" : C.dark
-
-  useEffect(() => {
+  useEffect(function() {
     if (!isMobile) setOpen(false)
   }, [isMobile])
+
+  const handleHamburger = function() { setOpen(function(p) { return !p }) }
+  const handleClose     = function() { setOpen(false) }
+  const phoneEnter      = function(e) { e.target.style.color = "rgba(254,239,220,0.75)" }
+  const phoneLeave      = function(e) { e.target.style.color = "rgba(254,239,220,0.42)" }
 
   return (
     <nav
       style={{
         position: "fixed",
-        top: `${adminH}px`,
+        top: adminH + "px",
         left: 0,
         right: 0,
         zIndex: 99999,
         overflow: "visible",
       }}
     >
-      {/* ── TOP ACCENT LINE ── */}
       <div style={{
         height: "2px",
-        background: `linear-gradient(90deg,
-          transparent 0%,
-          ${C.rose} 20%,
-          ${C.muted} 50%,
-          ${C.rose} 80%,
-          transparent 100%)`,
+        background: "linear-gradient(90deg, transparent 0%, " + C.rose + " 20%, " + C.muted + " 50%, " + C.rose + " 80%, transparent 100%)",
       }} />
 
-      {/* ── MAIN BAR ── */}
       <div style={{
         position: "relative",
         background: navBg,
         backdropFilter: scrolled ? "blur(18px)" : "none",
         WebkitBackdropFilter: scrolled ? "blur(18px)" : "none",
-        boxShadow: scrolled
-          ? "0 8px 40px rgba(63,16,22,0.45)"
-          : "none",
+        boxShadow: scrolled ? "0 8px 40px rgba(63,16,22,0.45)" : "none",
         transition: "background .35s ease, box-shadow .35s ease",
       }}>
 
@@ -355,7 +370,7 @@ export default function Navbar() {
           maxWidth: "1340px",
           margin: "0 auto",
           padding: "0 2rem",
-          height: scrolled ? "64px" : "72px",
+          height: scrolled ? "80px" : "90px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -363,38 +378,21 @@ export default function Navbar() {
           transition: "height .3s ease",
         }}>
 
-          {/* ── LOGO ── */}
           <a href="/" style={{ textDecoration: "none", flexShrink: 0, lineHeight: 1 }}>
-            {/* Wordmark */}
-            <div style={{
-              fontFamily: "'Playfair Display', serif",
-              fontStyle: "italic",
-              fontWeight: 700,
-              fontSize: scrolled ? "1.38rem" : "1.52rem",
-              color: C.cream,
-              letterSpacing: "-0.025em",
-              lineHeight: 1,
-              transition: "font-size .3s ease",
-            }}>
-              Victoria Pastry Co.
-            </div>
-            {/* Tagline */}
-            <div style={{
-              fontFamily: "'Lato', sans-serif",
-              fontWeight: 700,
-              fontSize: "0.50rem",
-              letterSpacing: "0.30em",
-              textTransform: "uppercase",
-              color: C.rose,
-              marginTop: "5px",
-              opacity: scrolled ? 0.7 : 1,
-              transition: "opacity .3s",
-            }}>
-              North Beach &nbsp;·&nbsp; Est. 1914
-            </div>
+            <img
+              src="http://victoria-pastry.local/wp-content/uploads/2026/05/VICTORIA_Imagotipo.png"
+              alt="Victoria Pastry Company"
+              style={{
+                height: scrolled ? "56px" : "70px",
+                width: scrolled ? "240px" : "300px",
+                objectFit: "contain",
+                objectPosition: "left center",
+                display: "block",
+                transition: "height .3s ease, width .3s ease",
+              }}
+            />
           </a>
 
-          {/* ── DESKTOP LINKS ── */}
           {!isMobile && (
             <div style={{
               display: "flex",
@@ -403,59 +401,68 @@ export default function Navbar() {
               flex: 1,
               justifyContent: "center",
             }}>
-              {NAV_LINKS.map((link, i) => (
-                <React.Fragment key={link.label}>
-                  {i > 0 && <Dot />}
-                  <DesktopLink {...link} scrollOffset={scrollOffset} />
-                </React.Fragment>
-              ))}
+              {NAV_LINKS.map(function(link, i) {
+                return (
+                  <React.Fragment key={link.label}>
+                    {i > 0 && <Dot />}
+                    <DesktopLink
+                      label={link.label}
+                      href={link.href}
+                      featured={link.featured}
+                      scrollOffset={scrollOffset}
+                    />
+                  </React.Fragment>
+                )
+              })}
             </div>
           )}
 
-          {/* ── RIGHT SIDE ── */}
           <div style={{
             display: "flex",
             alignItems: "center",
             gap: "1.2rem",
             flexShrink: 0,
           }}>
-            {/* Phone — hidden on small screens */}
             {!isMobile && (
-              <a href="tel:+14157812015" style={{
-                fontFamily: "'Lato', sans-serif",
-                fontWeight: 300,
-                fontSize: "0.73rem",
-                color: "rgba(254,239,220,0.42)",
-                textDecoration: "none",
-                letterSpacing: "0.04em",
-                whiteSpace: "nowrap",
-                transition: "color .22s",
-              }}
-              onMouseEnter={e => e.target.style.color = "rgba(254,239,220,0.75)"}
-              onMouseLeave={e => e.target.style.color = "rgba(254,239,220,0.42)"}
+              <a
+                href="tel:+14157812015"
+                onMouseEnter={phoneEnter}
+                onMouseLeave={phoneLeave}
+                style={{
+                  fontFamily: "'Lato', sans-serif",
+                  fontWeight: 300,
+                  fontSize: "0.73rem",
+                  color: "rgba(254,239,220,0.42)",
+                  textDecoration: "none",
+                  letterSpacing: "0.04em",
+                  whiteSpace: "nowrap",
+                  transition: "color .22s",
+                }}
               >
                 (415) 781-2015
               </a>
             )}
 
-            {/* Order CTA */}
             {!isMobile && <OrderCTA />}
 
-            {/* Hamburger */}
             {isMobile && (
-              <Hamburger open={open} onClick={() => setOpen(p => !p)} />
+              <Hamburger open={open} onClick={handleHamburger} />
             )}
           </div>
 
-        </div>{/* end inner */}
+        </div>
 
-        {/* ── FROSTING WAVE ── */}
         <FrostingWave color={navBg} />
 
-        {/* ── MOBILE DRAWER ── */}
-        {isMobile && <MobileDrawer open={open} />}
+        {isMobile && (
+          <MobileDrawer
+            open={open}
+            scrollOffset={scrollOffset}
+            onClose={handleClose}
+          />
+        )}
 
-      </div>{/* end main bar */}
+      </div>
     </nav>
   )
 }

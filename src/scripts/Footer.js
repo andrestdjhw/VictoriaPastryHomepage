@@ -23,31 +23,34 @@ function getAdminBarHeight() {
   return bar ? bar.offsetHeight : 0
 }
 
-function smoothTo(href, offset = 0) {
+function smoothTo(href, offset) {
+  if (offset === undefined) offset = 0
   if (!href.startsWith("#")) {
     window.location.href = href
     return
   }
-
   const el = document.querySelector(href)
   if (!el) return
-
   const top = el.getBoundingClientRect().top + window.scrollY - offset
-  window.scrollTo({ top, behavior: "smooth" })
+  window.scrollTo({ top: top, behavior: "smooth" })
 }
 
 function FooterLink({ label, href, featured }) {
   const [hovered, setHovered] = useState(false)
 
+  const handleClick = function(e) {
+    e.preventDefault()
+    smoothTo(href, getAdminBarHeight() + 90)
+  }
+  const handleEnter = function() { setHovered(true) }
+  const handleLeave = function() { setHovered(false) }
+
   return (
     <a
       href={href}
-      onClick={(e) => {
-        e.preventDefault()
-        smoothTo(href, getAdminBarHeight() + 74)
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onClick={handleClick}
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
       style={{
         fontFamily: featured ? "'Playfair Display', serif" : "'Lato', sans-serif",
         fontStyle: featured ? "italic" : "normal",
@@ -138,72 +141,6 @@ function Badge({ children }) {
   )
 }
 
-function MiniTable({ left = false }) {
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: "absolute",
-        bottom: "10px",
-        [left ? "left" : "right"]: left ? "5%" : "7%",
-        width: "135px",
-        height: "80px",
-        opacity: 0.055,
-        pointerEvents: "none",
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          left: "50%",
-          bottom: "44px",
-          width: "90px",
-          height: "8px",
-          transform: "translateX(-50%)",
-          background: C.rose,
-          borderRadius: "999px",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          left: "50%",
-          bottom: "0",
-          width: "2px",
-          height: "46px",
-          background: C.rose,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          left: "20px",
-          bottom: "8px",
-          width: "32px",
-          height: "32px",
-          border: `2px solid ${C.rose}`,
-          borderTop: "none",
-          borderRadius: "0 0 18px 18px",
-          transform: "rotate(-7deg)",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          right: "20px",
-          bottom: "8px",
-          width: "32px",
-          height: "32px",
-          border: `2px solid ${C.rose}`,
-          borderTop: "none",
-          borderRadius: "0 0 18px 18px",
-          transform: "rotate(7deg)",
-        }}
-      />
-    </div>
-  )
-}
-
 export default function Footer() {
   const year = new Date().getFullYear()
 
@@ -223,10 +160,7 @@ export default function Footer() {
         style={{
           position: "absolute",
           inset: 0,
-          background:
-            `linear-gradient(180deg, ${C.deep} 0%, #26080d 100%),
-             radial-gradient(circle at 20% 10%, rgba(214,188,173,.05), transparent 28%),
-             radial-gradient(circle at 82% 32%, rgba(157,121,97,.06), transparent 34%)`,
+          background: "linear-gradient(180deg, " + C.deep + " 0%, #26080d 100%)",
           pointerEvents: "none",
         }}
       />
@@ -246,9 +180,6 @@ export default function Footer() {
         }}
       />
 
-      <MiniTable left />
-      <MiniTable />
-
       <div
         style={{
           position: "relative",
@@ -260,42 +191,26 @@ export default function Footer() {
         <div
           style={{
             height: "1px",
-            background:
-              "linear-gradient(90deg, transparent, rgba(214,188,173,.22), transparent)",
+            background: "linear-gradient(90deg, transparent, rgba(214,188,173,.22), transparent)",
             marginBottom: "3rem",
           }}
         />
 
         <div className="vp-footer-grid">
+
+          {/* COLUMNA 1 — Isologo principal + descripcion + badges */}
           <div>
             <a href="/" style={{ textDecoration: "none", display: "inline-block" }}>
-              <div
+              <img
+                src="http://victoria-pastry.local/wp-content/uploads/2026/05/VICTORIA_Isologo.png"
+                alt="Victoria Pastry Company"
                 style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontStyle: "italic",
-                  fontWeight: 700,
-                  fontSize: "2rem",
-                  letterSpacing: "-0.035em",
-                  color: "rgba(254,239,224,.88)",
-                  lineHeight: 1,
+                  height: "110px",
+                  width: "110px",
+                  display: "block",
+                  objectFit: "contain",
                 }}
-              >
-                Victoria Pastry Co.
-              </div>
-
-              <div
-                style={{
-                  fontFamily: "'Lato', sans-serif",
-                  fontWeight: 700,
-                  fontSize: "0.5rem",
-                  letterSpacing: "0.31em",
-                  textTransform: "uppercase",
-                  color: "rgba(214,188,173,.62)",
-                  marginTop: "8px",
-                }}
-              >
-                North Beach &nbsp;·&nbsp; Est. 1914
-              </div>
+              />
             </a>
 
             <p
@@ -326,6 +241,7 @@ export default function Footer() {
             </div>
           </div>
 
+          {/* COLUMNA 2 — Links */}
           <div
             style={{
               borderLeft: "1px solid rgba(254,239,220,.075)",
@@ -353,12 +269,13 @@ export default function Footer() {
                 gap: ".85rem",
               }}
             >
-              {FOOTER_LINKS.map((link) => (
-                <FooterLink key={link.label} {...link} />
-              ))}
+              {FOOTER_LINKS.map(function(link) {
+                return <FooterLink key={link.label} {...link} />
+              })}
             </nav>
           </div>
 
+          {/* COLUMNA 3 — Visita */}
           <div
             style={{
               background: "rgba(254,239,220,.035)",
@@ -474,9 +391,31 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Sello "A Tradition Since 1914" centrado */}
         <div
           style={{
-            marginTop: "3.6rem",
+            marginTop: "3rem",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <img
+            src="http://victoria-pastry.local/wp-content/uploads/2026/05/VICTORIA_Sello-1-scaled.png"
+            alt="A Tradition Since 1914"
+            style={{
+              height: "56px",
+              width: "auto",
+              objectFit: "contain",
+              opacity: 0.6,
+              filter: "brightness(1.1)",
+            }}
+          />
+        </div>
+
+        {/* Bottom bar */}
+        <div
+          style={{
+            marginTop: "1.5rem",
             paddingTop: "1.25rem",
             borderTop: "1px solid rgba(254,239,220,.07)",
             display: "flex",

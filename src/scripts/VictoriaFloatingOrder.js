@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 
-const logoUrl = "/wp-content/uploads/2026/04/victoria-pastry-logo.png" // ← swap for real logo path
+const logoUrl = "/wp-content/uploads/2026/05/VICTORIA_Isotipo-2.png" // ← swap for real logo path
 
 export default function VictoriaFloatingOrder() {
   const [isVisible, setIsVisible] = useState(false)

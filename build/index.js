@@ -247,7 +247,7 @@ function Footer() {
               display: "inline-block"
             },
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
-              src: "http://victoria-pastry.local/wp-content/uploads/2026/05/VICTORIA_Isologo.png",
+              src: "/wp-content/uploads/2026/05/VICTORIA_Isologo.png",
               alt: "Victoria Pastry Company",
               style: {
                 height: "110px",
@@ -409,7 +409,7 @@ function Footer() {
           justifyContent: "center"
         },
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
-          src: "http://victoria-pastry.local/wp-content/uploads/2026/05/VICTORIA_Sello-1-scaled.png",
+          src: "/wp-content/uploads/2026/05/VICTORIA_Sello-1-scaled.png",
           alt: "A Tradition Since 1914",
           style: {
             height: "56px",
@@ -907,7 +907,7 @@ function Navbar() {
             lineHeight: 1
           },
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
-            src: "http://victoria-pastry.local/wp-content/uploads/2026/05/VICTORIA_Imagotipo.png",
+            src: "/wp-content/uploads/2026/05/VICTORIA_Imagotipo.png",
             alt: "Victoria Pastry Company",
             style: {
               height: scrolled ? "56px" : "70px",
